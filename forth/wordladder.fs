@@ -1,21 +1,46 @@
 \ wordladder.fs
-2 BASE !
-00011111 CONSTANT AZ-MASK
-DECIMAL
 
-: LVALUE ( char -- lvalue )
-    AZ-MASK AND 1- ;
-
-: S>5L-VALUE ( addr,count -- flvalue )
+: S>FLWORD ( addr,count -- flvalue )
     0 -ROT 
     OVER + SWAP
-    DO 26 * I C@ LVALUE + LOOP ;
+    DO 8 LSHIFT I C@ 255 AND + LOOP ;
 
-: 5L-VALUE-CHARS ( flvalue -- ch4,ch3,ch2,ch1,ch0 )
+: FLWORD>CHARS ( flvalue -- c4,c3,c2,c1,c0 )
     5 0 DO
-        26 /MOD SWAP [CHAR] A + SWAP
+        DUP 255 AND
+        SWAP 8 RSHIFT
     LOOP DROP ;
 
-: .5L ( flvalue -- )
-    5L-VALUE-CHARS 
-    5 0 DO EMIT LOOP ;
+: FLWORD>S ( flvalue, addr -- )
+    >R FLWORD>CHARS R>
+    DUP 5 + SWAP DO I C! LOOP ;
+
+: MASK ( n -- bitmask zeroing byte n )
+    8 * 255 SWAP LSHIFT -1 XOR AND ;
+
+
+
+
+: NEIGHBOR? ( flw,fwl -- f )
+    0 -ROT
+    5 0 DO
+        2DUP I MASK
+        SWAP I MASK
+        = IF ROT 1+ -ROT THEN
+    LOOP
+    2DROP
+    1 = ;
+
+REQUIRE ffl/act.fs
+
+ACT-CREATE FLWORDS
+
+' - FLWORDS ACT-COMPARE!
+
+: ADD-WORD ( addr,count -- )
+    S>FLWORD 0 SWAP FLWORDS ACT-INSERT ;
+
+: IS-WORD? ( addr,count -- flag )
+    S>FLWORD FLWORDS ACT-HAS? ;
+    
+    

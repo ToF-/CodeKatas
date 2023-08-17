@@ -1,21 +1,22 @@
 require ffl/tst.fs
 require wordladder.fs
-
+PAGE
 T{
-    S" aaaaa" S>5L-VALUE 0 ?S
-    S" aaaab" S>5L-VALUE 1 ?S
-    s" AAAAA" S>5L-VALUE 0 ?S
-    s" AAAAZ" S>5L-VALUE 25 ?S
-    s" AAABA" S>5L-VALUE 26 ?S
-    s" AAABB" S>5L-VALUE 27 ?S
-    s" AAAZZ" S>5L-VALUE 675 ?S
-    s" zzzzz" S>5L-VALUE 26 26 26 26 26 * * * * 1- ?S
-    s" cargo" S>5L-VALUE 925614 ?S
-    s" alban" S>5L-VALUE 194025 ?S
-    
-    s" clara" S>5L-VALUE 5L-VALUE-CHARS 
-    CHAR C ?S CHAR L ?S CHAR A ?S CHAR R ?S CHAR A ?S
-    s" tests" S>5L-VALUE .5L  \ should print TESTS
-}T
+    S" aaaaa" S>FLWORD S" aaaab" S>FLWORD <> ?TRUE
+    S" cargo" S>FLWORD S" cargo" S>FLWORD = ?TRUE
+    S" again" S>FLWORD PAD FLWORD>S PAD 5 S" again" ?STR
 
+    S" CLERK" ADD-WORD
+    S" AGAIN" ADD-WORD
+    S" LOVER" ADD-WORD
+
+    S" CLERK" IS-WORD? -1 ?S
+    S" LOVER" IS-WORD? -1 ?S
+    S" CROWN" IS-WORD? 0 ?S
+
+    S" CROWN" S>FLWORD S" CROWD" S>FLWORD NEIGHBOR? ?TRUE
+    S" CROWN" S>FLWORD S" BROWN" S>FLWORD NEIGHBOR? ?TRUE
+    S" FROWN" S>FLWORD S" DROWN" S>FLWORD NEIGHBOR? ?TRUE
+    S" BRAIN" S>FLWORD S" FRAIL" S>FLWORD NEIGHBOR? ?FALSE
+}T
 BYE
