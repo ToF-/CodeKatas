@@ -1,104 +1,43 @@
 \ wordladder.fs
 
 5 CONSTANT BITS/LETTER
-2 BASE ! 11111 CONSTANT LETTER-MASK DECIMAL
+31 CONSTANT LETTER-MASK
 
-VARIABLE LETTERS/WORD
-5 LETTERS/WORD !
-
-: #LETTERS/WORD
-    LETTERS/WORD @ ;
-
-: CHAR>LETTER-VALUE ( char -- lv )
+: C>LETTER-VALUE ( c -- n )
     TOUPPER [CHAR] A - 1+ ;
 
-: LETTER-VALUE>CHAR ( lv -- char )
-   [CHAR] A + 1- ;
-
-: S>WORD-KEY ( addr,count -- wk )
-    0 -ROT
-    OVER + SWAP DO
-        BITS/LETTER LSHIFT
-        I C@ CHAR>LETTER-VALUE OR
-    LOOP ;
-
-: WORD-KEY>S ( wk,addr -- addr,count )
-    #LETTERS/WORD OVER +
-    BEGIN
-        2DUP <= WHILE
-            
-    DO
-    #LETTERS/WORD 0 DO
-        OVER  BITS/LETTER RSHIFT    \ wk,addr,wk'
-        -ROT SWAP LETTER-MASK AND   \ wk',addr,lv
-        LETTER-VALUE>CHAR           \ wk',addr,c
-        OVER #LETTERS/WORD + 1- I - C!      \ wk',addr
-    LOOP NIP #LETTERS/WORD ;
-        
-: UPPERCASE! ( addr,count -- )
-    OVER + SWAP DO
-        I C@ TOUPPER I C!
-    LOOP ;
-
-: LETTER>INDEX ( char --  1..26 )
-    [CHAR] A - 1+ ;
-
-: INDEX>LETTER ( n -- char )
+: LETTER-VALUE>C ( n -- c )
     1- [CHAR] A + ;
 
-: S>KEY ( addr,count -- flvalue )
-    2DUP UPPERCASE!
-    0 -ROT 
-    OVER + SWAP
-    DO BITS/LETTER LSHIFT I C@ LETTER>INDEX 31 AND + LOOP ;
+: S-REVERSE! ( addr, count -- )
+    1- OVER +
+    BEGIN
+        2DUP U< WHILE   \ start,end
+        2DUP C@ >R C@   \ start,end,cs
+        OVER C!         \ start,end
+        OVER R> SWAP C! \ start,end
+        SWAP 1+ SWAP 1-
+    REPEAT 2DROP ;
 
-: FLWORD>CHARS ( flvalue -- c4,c3,c2,c1,c0 )
-    LETTERS/WORD @ 0 DO
-        DUP 31 AND INDEX>LETTER
-        SWAP BITS/LETTER RSHIFT
-    LOOP DROP ;
+: S-CHARS ( addr, count -- c0,c1..cCount-1)
+    OVER + SWAP DO I C@ LOOP ;
 
-: KEY>S ( flvalue, addr -- )
-    >R FLWORD>CHARS R>
-    DUP LETTERS/WORD @ + SWAP DO I C! LOOP ;
+: S>WORD-KEY ( addr, count -- u )
+    2DUP S-REVERSE! DUP >R
+    S-CHARS 0
+    R> 0 DO
+        BITS/LETTER LSHIFT
+        SWAP C>LETTER-VALUE OR
+    LOOP ;
 
-: MASK-POS \ n -- ((WS-1)-n) * BL
-    1+ LETTERS/WORD @ SWAP - BITS/LETTER * ;
-
-: L-MASK ( n -- bit pattern )
-    MASK-POS 31 SWAP LSHIFT ;
-
-: MASK ( n -- bitmask zeroing byte n )
-    L-MASK -1 XOR AND ;
-
-: VAL:ROOT-KEY ( flv, n -- index, flv )
-    2DUP L-MASK AND OVER MASK-POS RSHIFT
-    -ROT MASK ;
-
-: ROOT-KEY|VAL ( flv,l,n -- flv )
-    MASK-POS LSHIFT OR ; 
-
-: NEIGHBOR? ( flw,fwl -- f )
-    0 -ROT
-    LETTERS/WORD @ 0 DO
-        2DUP I MASK
-        SWAP I MASK
-        = IF ROT 1+ -ROT THEN
-    LOOP
-    2DROP
-    1 = ;
-
-
-REQUIRE ffl/act.fs
-
-ACT-CREATE FLWORDS
-
-' - FLWORDS ACT-COMPARE!
-
-: ADD-WORD ( addr,count -- )
-    S>KEY 0 SWAP FLWORDS ACT-INSERT ;
-
-: IS-WORD? ( addr,count -- flag )
-    S>KEY FLWORDS ACT-HAS? ;
-    
-    
+: WORD-KEY>S ( addr, u -- addr, count )
+    0 -ROT BEGIN                   \ count,addr,u
+        DUP WHILE                  \ count,addr,u
+        DUP LETTER-MASK AND        \ count,addr,u,l
+        LETTER-VALUE>C             \ count,addr,u,c
+        2>R 2DUP + 2R>             \ count,addr,addr,u,c
+        ROT C!                     \ count,addr,u
+        BITS/LETTER RSHIFT         \ count,addr,u'
+        ROT 1+ -ROT                \ count',addr,u'
+    REPEAT DROP SWAP 
+    2DUP S-REVERSE! ;
