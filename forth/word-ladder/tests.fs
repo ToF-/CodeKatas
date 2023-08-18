@@ -1,7 +1,32 @@
 require ffl/tst.fs
 require wordladder.fs
 PAGE
+
+\ we settle for 3 letter words
+
+3 LETTERS/WORD !
+
+\ a word-key gives a unique numeric value for a string of 3, 4 or 5 letters
+\ the word-key for the string ABC should have the binary value 00001 00010 00011
+\ the word-key for the string CAT should have the binary value 00011 00001 10100
 T{
+    S" ABC"  S>WORD-KEY 2 BASE ! 000010001000011 ?S DECIMAL
+    S" CAT"  S>WORD-KEY 2 BASE ! 000110000110100 ?S DECIMAL
+}T
+
+\ a word-key can be converted back into a string
+\ (here with 4 letter words)
+
+T{
+    4 LETTERS/WORD !
+    2 BASE !  00010000011010001000 DECIMAL
+    PAD WORD-KEY>S  s" BATH" ?STR
+}T
+
+BYE
+
+T{
+
     3 WORD-SIZE !
     0 MASK-POS 10 ?S
     1 MASK-POS  5 ?S
