@@ -1,5 +1,10 @@
 \ wordladder.fs
 
+5 CONSTANT BIT/LETTER
+
+VARIABLE WORD-SIZE
+5 WORD-SIZE !
+
 : UPPERCASE! ( addr,count -- )
     OVER + SWAP DO
         I C@ TOUPPER I C!
@@ -15,20 +20,20 @@
     2DUP UPPERCASE!
     0 -ROT 
     OVER + SWAP
-    DO 5 LSHIFT I C@ LETTER>INDEX 31 AND + LOOP ;
+    DO BIT/LETTER LSHIFT I C@ LETTER>INDEX 31 AND + LOOP ;
 
 : FLWORD>CHARS ( flvalue -- c4,c3,c2,c1,c0 )
-    5 0 DO
+    WORD-SIZE @ 0 DO
         DUP 31 AND INDEX>LETTER
-        SWAP 5 RSHIFT
+        SWAP BIT/LETTER RSHIFT
     LOOP DROP ;
 
 : KEY>S ( flvalue, addr -- )
     >R FLWORD>CHARS R>
-    DUP 5 + SWAP DO I C! LOOP ;
+    DUP WORD-SIZE @ + SWAP DO I C! LOOP ;
 
-: MASK-POS ( n -- n )
-    4 SWAP - 5 * ;
+: MASK-POS \ n -- ((WS-1)-n) * BL
+    1+ WORD-SIZE @ SWAP - BIT/LETTER * ;
 
 : L-MASK ( n -- bit pattern )
     MASK-POS 31 SWAP LSHIFT ;
@@ -45,7 +50,7 @@
 
 : NEIGHBOR? ( flw,fwl -- f )
     0 -ROT
-    5 0 DO
+    WORD-SIZE @ 0 DO
         2DUP I MASK
         SWAP I MASK
         = IF ROT 1+ -ROT THEN

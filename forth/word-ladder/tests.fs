@@ -2,6 +2,18 @@ require ffl/tst.fs
 require wordladder.fs
 PAGE
 T{
+    3 WORD-SIZE !
+    0 MASK-POS 10 ?S
+    1 MASK-POS  5 ?S
+    2 MASK-POS  0 ?S
+
+    5 WORD-SIZE !
+    0 MASK-POS 20 ?S
+    1 MASK-POS 15 ?S
+    2 MASK-POS 10 ?S
+    3 MASK-POS  5 ?S
+    4 MASK-POS  0 ?S
+
     S" drone" 2DUP UPPERCASE! S" DRONE" ?STR
 
     CHAR A LETTER>INDEX 1 ?S
