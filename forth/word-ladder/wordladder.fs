@@ -26,12 +26,15 @@
     BITS/LETTER LSHIFT
     SWAP C>LETTER-VALUE OR ;
 
+: SIZE>>WORD-KEY ( n,u -- u' )
+    2 LSHIFT SWAP 2 - OR ;
+
 : (S>WORD-KEY) ( addr, count -- u )
     DUP -ROT
     2DUP S-REVERSE! 
     DUP >R S-CHARS 
     0 R> 0 DO CHAR>>WORD-KEY LOOP 
-    2 LSHIFT SWAP 2 - OR ;
+    SIZE>>WORD-KEY ;
 
 : S>WORD-KEY ( addr, count -- u )
     DUP 3 6 WITHIN IF 
@@ -45,15 +48,14 @@
     DUP LETTER-MASK AND LETTER-VALUE>C
     SWAP BITS/LETTER RSHIFT SWAP ;
 
-: WORD-KEY-SIZE ( u -- n )
+: WORD-KEY>>SIZE ( u -- u',n )
+    DUP 2 RSHIFT SWAP
     3 AND 2 + ;
 
 : WORD-KEY>S ( u addr -- addr, count )
-    OVER WORD-KEY-SIZE    \ u,addr,count
-    2DUP 2>R
-    ROT 2 RSHIFT -ROT
+    SWAP WORD-KEY>>SIZE   \ addr,u,count
+    ROT SWAP 2DUP 2>R     \ u,addr,count [addr,count]
     OVER + SWAP DO
-        WORD-KEY>>CHAR    \ u',c
-        I C!
+        WORD-KEY>>CHAR I C!
     LOOP DROP
     2R> 2DUP S-REVERSE! ;
