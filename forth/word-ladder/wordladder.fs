@@ -22,22 +22,24 @@
 : S-CHARS ( addr, count -- c0,c1..cCount-1)
     OVER + SWAP DO I C@ LOOP ;
 
+: CHAR>>WORD-KEY ( c,u -- u' )
+    BITS/LETTER LSHIFT
+    SWAP C>LETTER-VALUE OR ;
+
 : S>WORD-KEY ( addr, count -- u )
-    2DUP S-REVERSE! DUP >R
-    S-CHARS 0
-    R> 0 DO
-        BITS/LETTER LSHIFT
-        SWAP C>LETTER-VALUE OR
-    LOOP ;
+    2DUP S-REVERSE! 
+    DUP >R S-CHARS 0 R>
+    0 DO CHAR>>WORD-KEY LOOP ;
+
+: WORD-KEY>>CHAR ( u -- u',c )
+    DUP LETTER-MASK AND LETTER-VALUE>C
+    SWAP BITS/LETTER RSHIFT SWAP ;
 
 : WORD-KEY>S ( addr, u -- addr, count )
-    0 -ROT BEGIN                   \ count,addr,u
-        DUP WHILE                  \ count,addr,u
-        DUP LETTER-MASK AND        \ count,addr,u,l
-        LETTER-VALUE>C             \ count,addr,u,c
-        2>R 2DUP + 2R>             \ count,addr,addr,u,c
-        ROT C!                     \ count,addr,u
-        BITS/LETTER RSHIFT         \ count,addr,u'
-        ROT 1+ -ROT                \ count',addr,u'
-    REPEAT DROP SWAP 
+    0 SWAP BEGIN        \ addr,count,u
+        DUP WHILE       
+        WORD-KEY>>CHAR  \ addr,count,u',c
+        2OVER + C!      
+        SWAP 1+ SWAP    \ addr,count',u'
+    REPEAT DROP
     2DUP S-REVERSE! ;
