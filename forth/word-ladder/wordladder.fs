@@ -26,17 +26,25 @@
     BITS/LETTER LSHIFT
     SWAP C>LETTER-VALUE OR ;
 
-: S>WORD-KEY ( addr, count -- u )
+: (S>WORD-KEY) ( addr, count -- u )
     2DUP S-REVERSE! 
     DUP >R S-CHARS 0 R>
     0 DO CHAR>>WORD-KEY LOOP ;
+
+: S>WORD-KEY ( addr, count -- u )
+    DUP 3 6 WITHIN IF 
+        (S>WORD-KEY) 
+    ELSE 
+        s" word size must be 3,4 or 5"
+        EXCEPTION THROW
+    THEN ;
 
 : WORD-KEY>>CHAR ( u -- u',c )
     DUP LETTER-MASK AND LETTER-VALUE>C
     SWAP BITS/LETTER RSHIFT SWAP ;
 
-: WORD-KEY>S ( addr, u -- addr, count )
-    0 SWAP BEGIN        \ addr,count,u
+: WORD-KEY>S ( u addr -- addr, count )
+    0 ROT BEGIN        \ addr,count,u
         DUP WHILE       
         WORD-KEY>>CHAR  \ addr,count,u',c
         2OVER + C!      
