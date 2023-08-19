@@ -6,7 +6,10 @@ PAGE
 
 \ reducing a string to a word key:
 \ each letter of the word occupies 5 bits, A=00001, B=00010, … Z=11010
-\ the letter value 0 has a special meaning
+\ the letter value 31 has a special meaning of wildcard letter
+\ to describe a neighbor group
+\ the first 2 bits of the word key give it's number of letters:
+\ 01: 3 letter word, 10: 4 letter word, 11:five letter word
 
 .( converting a char to a letter value and vice versa ) CR
 T{
@@ -33,13 +36,24 @@ T{
 }T
 .( creating a word key from a string ) CR
 T{
-    s" CAT" S>WORD-KEY BINARY 000110000110100 ?S DECIMAL
-    s" AGAIN" S>WORD-KEY BINARY 0000100111000010100101110 ?S DECIMAL
+    s" CAT" S>WORD-KEY BINARY 00011000011010001 ?S DECIMAL
+    s" CART" S>WORD-KEY BINARY 0001100001100101010010 ?S DECIMAL
+    s" AGAIN" S>WORD-KEY BINARY 10011100001010010111011 ?S DECIMAL
 }T
 .( converting a word key into a string ) CR
 T{
-    BINARY 000110000110100 DECIMAL PAD WORD-KEY>S S" CAT" ?STR
-    BINARY 0000100111000010100101110 DECIMAL PAD WORD-KEY>S S" AGAIN" ?STR
+    BINARY 00011000011010001 DECIMAL PAD WORD-KEY>S S" CAT" ?STR
+    BINARY 10011100001010010111011 DECIMAL PAD WORD-KEY>S S" AGAIN" ?STR
 }T
+\ given a word key, we can find its neighbor groups
+\ for example the word CARD has the neighbor groups :
+\ _ARD, C_RD, CA_D, and CAR_
+\ each neighbord group is a word key, and we can attach
+\ letters that complement the word key to form a full word
+\ for instance, since we have the word CARD, we know that
+\ the neighbor group _CARD exist, with the letter C attached
+\ when/if we see the word LARD, we can add the letter L to 
+\ the neighbor group _ARD
+
 BYE
 
