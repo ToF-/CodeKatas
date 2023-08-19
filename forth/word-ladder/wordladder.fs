@@ -3,6 +3,7 @@
 5 CONSTANT BITS/LETTER
 31 CONSTANT LETTER-MASK
 
+
 : C>LETTER-VALUE ( c -- n )
     TOUPPER [CHAR] A - 1+ ;
 
@@ -31,15 +32,15 @@
 
 : (S>WORD-KEY) ( addr, count -- u )
     DUP -ROT
-    2DUP S-REVERSE! 
-    DUP >R S-CHARS 
-    0 R> 0 DO CHAR>>WORD-KEY LOOP 
+    2DUP S-REVERSE!
+    DUP >R S-CHARS
+    0 R> 0 DO CHAR>>WORD-KEY LOOP
     SIZE>>WORD-KEY ;
 
 : S>WORD-KEY ( addr, count -- u )
-    DUP 3 6 WITHIN IF 
-        (S>WORD-KEY) 
-    ELSE 
+    DUP 3 6 WITHIN IF
+        (S>WORD-KEY)
+    ELSE
         s" word size must be 3,4 or 5"
         EXCEPTION THROW
     THEN ;
@@ -52,10 +53,21 @@
     DUP 2 RSHIFT SWAP
     3 AND 2 + ;
 
-: WORD-KEY>S ( u addr -- addr, count )
+: WORD-KEY>S ( u,addr -- addr, count )
     SWAP WORD-KEY>>SIZE   \ addr,u,count
     ROT SWAP 2DUP 2>R     \ u,addr,count [addr,count]
     OVER + SWAP DO
         WORD-KEY>>CHAR I C!
     LOOP DROP
     2R> 2DUP S-REVERSE! ;
+
+: WORD-KEY-LETTER ( u,i -- n )
+    SWAP WORD-KEY>>SIZE    \ i,u',s
+    1- ROT -               \ u,offset
+    BITS/LETTER * RSHIFT
+    LETTER-MASK AND ;
+
+: WILDCARD! ( u,i -- u' )
+    OVER WORD-KEY>>SIZE NIP
+    1- SWAP - BITS/LETTER * 2 + 
+    LETTER-MASK SWAP LSHIFT OR ;

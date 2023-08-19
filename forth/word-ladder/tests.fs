@@ -48,12 +48,29 @@ T{
 \ given a word key, we can find its neighbor groups
 \ for example the word CARD has the neighbor groups :
 \ _ARD, C_RD, CA_D, and CAR_
-\ each neighbord group is a word key, and we can attach
+\ each neighbor group is a word key, and we can attach
 \ letters that complement the word key to form a full word
 \ for instance, since we have the word CARD, we know that
 \ the neighbor group _CARD exist, with the letter C attached
 \ when/if we see the word LARD, we can add the letter L to 
 \ the neighbor group _ARD
-
+.( extracting the nth letter from a word-key ) CR
+T{ 
+    S" DOG" S>WORD-KEY 0 WORD-KEY-LETTER 4 ?S
+    S" DOG" S>WORD-KEY 2 WORD-KEY-LETTER 7 ?S
+}T
+.( masking a word-key with a wildcard ) CR
+T{
+    S" DOG" S>WORD-KEY 0 WILDCARD! PAD WORD-KEY>S S" _OG" ?STR
+    S" DOG" S>WORD-KEY 1 WILDCARD! PAD WORD-KEY>S S" D_G" ?STR
+    S" DOG" S>WORD-KEY 2 WILDCARD! PAD WORD-KEY>S S" DO_" ?STR
+}T
+BYE
+.( getting a neighbor group and letter ) CR
+T{
+    S" DOG" S>WORD-KEY 0 NEIGHBOR-GROUP PAD WORD-KEY>S S" _OG" ?STR 4 ?S
+    S" DOG" S>WORD-KEY 1 NEIGHBOR-GROUP PAD WORD-KEY>S S" D_G" ?STR 15 ?S
+    S" DOG" S>WORD-KEY 2 NEIGHBOR-GROUP PAD WORD-KEY>S S" DO_" ?STR 7 ?S
+}T
 BYE
 
