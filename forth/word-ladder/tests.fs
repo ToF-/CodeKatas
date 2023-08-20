@@ -65,12 +65,35 @@ T{
     S" DOG" S>WORD-KEY 1 WILDCARD! PAD WORD-KEY>S S" D_G" ?STR
     S" DOG" S>WORD-KEY 2 WILDCARD! PAD WORD-KEY>S S" DO_" ?STR
 }T
-BYE
-.( getting a neighbor group and letter ) CR
+\ to keep the letters of a neighbor group we can make bit set
+\ a 26 bits cell can store numbers from 1 to 26
+.( storing and retrieving numbers in a bitset cell ) CR
 T{
-    S" DOG" S>WORD-KEY 0 NEIGHBOR-GROUP PAD WORD-KEY>S S" _OG" ?STR 4 ?S
-    S" DOG" S>WORD-KEY 1 NEIGHBOR-GROUP PAD WORD-KEY>S S" D_G" ?STR 15 ?S
-    S" DOG" S>WORD-KEY 2 NEIGHBOR-GROUP PAD WORD-KEY>S S" DO_" ?STR 7 ?S
+    1 0 BIT>>BITSET BITSET-SIZE 1 ?S
+    1 0 BIT>>BITSET 
+    2 SWAP BIT>>BITSET
+    17 SWAP BIT>>BITSET DUP BITSET-SIZE 3 ?S
+    BITSET-BITS 17 ?S 2 ?S 1 ?S
 }T
+\ for each string given in the initial word list, we insert its
+\ word-key and the word-keys of its neighbor groups and letters. That way the 
+\ dictionnary allows for looking for neighbors
+.( feeding the word-key dictionnary ) CR
+T{
+    S" DOG" S>WORD-KEY FIND-WORD-KEY 0 ?S
+    S" DOG" S>WORD-KEY ADD-WORD-KEY
+    S" FOG" S>WORD-KEY ADD-WORD-KEY
+    S" DOG" S>WORD-KEY FIND-WORD-KEY ?TRUE 0 ?S
+    S" FOG" S>WORD-KEY FIND-WORD-KEY ?TRUE 0 ?S
+
+    S" _OG" S>WORD-KEY FIND-WORD-KEY ?TRUE 
+    DUP BITSET-SIZE 2 ?S
+    BITSET-BITS 6 ?S 4 ?S
+
+    S" D_G" S>WORD-KEY FIND-WORD-KEY ?TRUE 
+    DUP BITSET-SIZE 1 ?S
+    BITSET-BITS 15 ?S
+}T
+
 BYE
 

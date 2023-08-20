@@ -71,3 +71,46 @@
     OVER WORD-KEY>>SIZE NIP
     1- SWAP - BITS/LETTER * 2 + 
     LETTER-MASK SWAP LSHIFT OR ;
+
+REQUIRE ffl/act.fs
+
+: BIT>>BITSET ( n,bs -- bs' )
+    1 ROT LSHIFT OR ;
+
+: BITSET-SIZE ( bs -- n )
+    0
+    64 0 DO
+        OVER 1 I LSHIFT AND IF
+            1+
+        THEN
+    LOOP NIP ;
+
+: BITSET-BITS ( bs -- b1,..bn )
+    64 0 DO
+        DUP 1 I LSHIFT AND IF
+            I SWAP
+        THEN
+    LOOP DROP ;
+
+ACT-CREATE WORD-KEYS
+
+: FIND-WORD-KEY ( u -- d|f )
+    WORD-KEYS ACT-GET ;
+
+: ADD-NEIGHBOR-GROUPS ( u -- )
+    DUP WORD-KEY>>SIZE NIP
+    0 DO
+        DUP  I WORD-KEY-LETTER  \ u,l --
+        OVER I WILDCARD!        \ u,l,u'
+        DUP WORD-KEYS ACT-GET IF          \ u,l,u',d
+            ROT SWAP BIT>>BITSET
+        ELSE
+            SWAP 0 BIT>>BITSET
+        THEN
+        SWAP WORD-KEYS ACT-INSERT
+    LOOP DROP ;
+
+: ADD-WORD-KEY ( u -- )
+    DUP ADD-NEIGHBOR-GROUPS
+    0 SWAP WORD-KEYS ACT-INSERT ;
+    
