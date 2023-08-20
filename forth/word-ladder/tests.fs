@@ -80,19 +80,20 @@ T{
 \ dictionnary allows for looking for neighbors
 .( feeding the word-key dictionnary ) CR
 T{
+    WORD-KEYS ACT-CLEAR
     S" DOG" S>WORD-KEY FIND-WORD-KEY 0 ?S
-    S" DOG" S>WORD-KEY ADD-WORD-KEY
-    S" FOG" S>WORD-KEY ADD-WORD-KEY
+    S" DOG" S>WORD-KEY ADD-WORD-KEY   \ will add DOG, _OG, D_G, DO_
+    S" FOG" S>WORD-KEY ADD-WORD-KEY   \ will add FOG, F_G, FO_
+    S" COG" S>WORD-KEY ADD-WORD-KEY   \ will add COG, C_G, CO_
+    S" LOG" S>WORD-KEY ADD-WORD-KEY   \ will add LOG, L_G, LO_
+
     S" DOG" S>WORD-KEY FIND-WORD-KEY ?TRUE 0 ?S
     S" FOG" S>WORD-KEY FIND-WORD-KEY ?TRUE 0 ?S
-
     S" _OG" S>WORD-KEY FIND-WORD-KEY ?TRUE 
-    DUP BITSET-SIZE 2 ?S
-    BITSET-BITS 6 ?S 4 ?S
+    BITSET-SIZE 4 ?S
+    #WORD-KEYS 13 ?S
+    .WORD-KEYS
 
-    S" D_G" S>WORD-KEY FIND-WORD-KEY ?TRUE 
-    DUP BITSET-SIZE 1 ?S
-    BITSET-BITS 15 ?S
 }T
 
 BYE
