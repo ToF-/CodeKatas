@@ -1,0 +1,14 @@
+strict graph ip_map {
+	fontname="Helvetica,Arial,sans-serif"
+	node [fontname="Helvetica,Arial,sans-serif"]
+	edge [fontname="Helvetica,Arial,sans-serif"]
+CA_ -- {CAB,CAR,CAT};
+CO_ -- {COG,COT};
+C_T -- {CAT,COT,CUT};
+DA_ -- {DAB,DAG,DAM};
+DO_ -- {DOC,DOG,DOT};
+D_G -- {DAG,DIG,DOG};
+_AB -- {CAB,DAB,TAB};
+_OG -- {COG,DOG,FOG,LOG};
+_OT -- {COT,DOT,LOT,POT};
+}

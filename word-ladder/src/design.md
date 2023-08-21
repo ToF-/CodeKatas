@@ -45,7 +45,7 @@ We end up with a (long) list of pairs (neighbor group, word). We can now store t
 
 Given the example above, and eliminating the neighbor groups containing only one word, we end up with this dictionary:
 ```
-{ CA$→[CAB,CAT)
+{ CA$→[CAB,CAT]
 , CO$→[COG,COT]
 , C$T→[CAT,COT]
 , DA$→[DAB,DAG,DAM]
