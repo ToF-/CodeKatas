@@ -39,7 +39,11 @@ Instead we can examine once the list, generating for each word a sublist of it's
 reading the word DOG, we would write the following pairs: ($OG,DOG),(D$G,DOG),(DO$,DOG)
 reading the word COG, we would add the following pairs: ($OG,COG),(C$G,COG),(CO$,COG)
 
-We end up with a (long) list of pairs (neighbor group, word). We can now store this information in a dictionary: for each pair that was generated (G,W), we follow this method: 
+We end up with a (long) list of pairs (neighbor group, word). We can now store this information in a new graph, where each node is either a word or a group, and egdes mean inclusion in a group. 
+
+![example groups](/images/example-groups.png)
+
+dictionary: for each pair that was generated (G,W), we follow this method: 
 - if K is not in the dictionary, add it and associate it with W
 - if K is already in the dictionary, add the word W to its list of words
 
