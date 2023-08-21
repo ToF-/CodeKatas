@@ -1,34 +1,4 @@
-# Design
-The general idea is to apply a breadth-first search on a graph of words where two words are connected if these words differ by only one letter. 
-
-Let's take the following words as an example : 
-```
-CAT,CAB,COG,COT,DAB,DAG,DAM,DOC,DOG,DOT
-```
-![example](/images/example.png)
-
-## Breadth-First Search algorithm
-We begin at the starting node, and search the graph while keeping _V_ a list of nodes to visit, and _P_ a list of the pairs _(W,V)_ where _W_ is the node we arrive to and _V_ is the node we come from. Each time we visit a new node, we look for those of its adjacent nodes that have not been visited yet, and add them to _the end of the visit list_.
-
-- Starting with an empty visit list and an empty path, we add the origin word, CAT, to the visit list.
-    - V = [CAT] T = {}
-- inspecting the node CAT, we find the neighbors CAB, COT and add them to list of nodes to be visited.  
-    - V = [CAB,COT]  P = {}
-- visiting CAB (from CAT) adds DAB, 
-    - V=[COT, DAB]  P={ CAB→CAT }
-- visiting COT (from CAT) adds COG and DOT 
-    - V=[DAB,COG,DOT] P = { CAB→CAT, COT→CAT }
-- visiting DAB (from CAB) adds DAG and DAM (CAB has already been visited)  
-    - V = [COG,DOT,DAG,DAM] P = { CAB→CAT, COT→CAT, DAB→CAB }
-- visiting COG (from COT) adds DOG 
-    - V = [DOT,DOG] P = { CAB→CAT, COT→CAT, DAB→CAB, COG→COT }
-- visiting DOT (from COT) adds DOC (DOG is already in the list) 
-    - V = [DOG,DOC] P = { CAB→CAT, COT→CAT, DAB→CAB, COG→COT, DOT→COT }
-- visiting DOG (from COG) finds the target and we have 
-    P ={ CAB→CAT, COT→CAT, DAB→CAB, COG→COT, DOT→COT, DOG→COG }
-- having found the target, we use P to list the path from DOG to CAT: DOG→COG→COT→CAT, and reverse this path.
-
-
+# From a List to a Graph
 Creating a graph of all words where edges are neighbor relations can take a lot of time if we go naïvely about it: given a word from the list, find all words in the list that are neighbors to this word. For a list of 3000 words, this will require 9 millions comparisons.
 
 Instead we can examine once the list, generating for each word a sublist of it's neighbor groups. For instance the word DOG has 3 neighbor groups : 

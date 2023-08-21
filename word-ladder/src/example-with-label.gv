@@ -1,0 +1,17 @@
+strict digraph ip_map {
+    node [colorscheme="SVG",width=0.5,height=0.2,shape = ellipse,fontcolor="darkcyan",fontsize=12,fontname="Courier",color="darkcyan"];
+    edge [colorscheme="SVG",color="darkcyan",fontcolor="darkcyan",fontsize=10,fontname="Courier"];
+    cat -> { cab } [label="1"];
+    cat -> { cot } [label="1"];
+    cab -> { dab } [label="2"];
+    cot -> { cog } [label="3"];
+    cot -> { dot } [label="3"];
+    dab -> { dag } [label="4"];
+    dab -> { dam } [label="4"];
+    cog -> { dog } [label="5"];
+    dot -> { doc };
+    dot -> { dog };
+    dag -> { dam };
+    dag -> { dog };
+    doc -> { dog };
+}

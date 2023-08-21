@@ -1,15 +1,17 @@
 strict graph ip_map {
-	fontname="Helvetica,Arial,sans-serif"
-	node [fontname="Helvetica,Arial,sans-serif"]
-	edge [fontname="Helvetica,Arial,sans-serif"]
-    CAT -- { CAB COT };
-    CAB -- { CAT DAB };
-    COG -- { COT DOG };
-    COT -- { CAT COG DOT };
-    DAB -- { CAB DAG DAM };
-    DAG -- { DAB DAM };
-    DAM -- { DAB DAG };
-    DOC -- { DOG DOT };
-    DOG -- { DAG DOC DOT };
-    DOT -- { COT DOC DOG };
+    node [colorscheme="SVG",width=0.5,height=0.2,shape = ellipse,fontcolor="darkcyan",fontsize=12,fontname="Courier",color="darkcyan"];
+    edge [colorscheme="SVG",color="darkcyan",fontcolor="darkcyan",fontsize=10,fontname="Courier"];
+    cat -- { cab };
+    cat -- { cot };
+    cab -- { dab };
+    cot -- { cog };
+    cot -- { dot };
+    dab -- { dag };
+    dab -- { dam };
+    cog -- { dog };
+    dot -- { doc };
+    dot -- { dog };
+    dag -- { dam };
+    dag -- { dog };
+    doc -- { dog };
 }
