@@ -21,3 +21,31 @@ The solution is: { _cat_, _cot_, _cog_, _dog_ }.
 
 
 ![example with label](/images/example-with-label.png)
+
+We can translate this approach into peusod code:
+
+```
+word-ladder(word Source, word Target, dictionary Graph)
+    list Visit ← []
+    dictionary Path ← empty
+    append Source to Visit
+    word Back ← ∅
+    word Current ← ∅
+    while Current ≠ Target and Visit ≠ [] do
+        Current ← head(Visit)
+        Visit ← tail(Visit)
+        insert key Current, value Back into dictionary Path
+        words Neighbors ← lookup for key Current in dictionary Graph
+        for word Neighbor  in Neighbors do 
+            append Neighbor into Visit
+        end
+    end
+    list R ← []
+    word C ← T
+    do 
+        insert C into R
+        C ← lookup for key C in dictionary Path 
+    until C = S
+    return R
+end
+```
