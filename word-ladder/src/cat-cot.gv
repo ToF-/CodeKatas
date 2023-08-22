@@ -1,0 +1,6 @@
+strict graph ip_map {
+    node [colorscheme="SVG",width=0.5,height=0.2,shape = ellipse,fontcolor="darkcyan",fontsize=12,fontname="Courier",color="darkcyan"];
+    edge [colorscheme="SVG",color="darkcyan",fontcolor="darkcyan",fontsize=10,fontname="Courier"];
+CAT -- {_AT,C_T,CA_};
+COT -- {_OT,C_T,CO_};
+}

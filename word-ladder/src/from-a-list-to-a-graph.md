@@ -1,39 +1,68 @@
 # From a List to a Graph
-Creating a graph of all words where edges are neighbor relations can take a lot of time if we go naïvely about it: given a word from the list, find all words in the list that are neighbors to this word. For a list of 3000 words, this will require 9 millions comparisons.
 
-Instead we can examine once the list, generating for each word a sublist of it's neighbor groups. For instance the word DOG has 3 neighbor groups : 
-- $OG : the group of all words having O and G has 2d and 3d letters
-- D$G : the group of all words having D and G has 1st and 3d letters
-- DO$ : the group of all words starting with D and O
+The breadth-first search algorithm works fine provided we give it a graph of adjacent words. But we don't have this information yet.
+How to create such a graph ? If we go naïvely about it:
 
-reading the word DOG, we would write the following pairs: ($OG,DOG),(D$G,DOG),(DO$,DOG)
-reading the word COG, we would add the following pairs: ($OG,COG),(C$G,COG),(CO$,COG)
+- for every word _A_ in the list, look at every word _B_ in the list; if _A_ is adjacent to _B_ then add the edge from _A_ to _B_ in the graph.
 
-We end up with a (long) list of pairs (neighbor group, word). We can now store this information in a new graph, where each node is either a word or a group, and egdes mean inclusion in a group. 
+our program will have to make millions of comparisons to create the graph.
 
-![example groups](/images/example-groups.png)
+We can reduce this number, by using storing some intermediate information about the adjacent words of a word.
 
-dictionary: for each pair that was generated (G,W), we follow this method: 
-- if K is not in the dictionary, add it and associate it with W
-- if K is already in the dictionary, add the word W to its list of words
+For example the word _cat_ belongs to 3 groups of words:
 
-Given the example above, and eliminating the neighbor groups containing only one word, we end up with this dictionary:
+- words that start with _ca_…
+- words that begin with a _c_ and end with a _t_
+- words that end with …_at_
+
+Thus we can insert 3 edges in the graph:
+
+- an edge from the node _ca\__ to the node _cat_
+- an edge from the node _c\_t_ to the node _cat_
+- an edge from the node _\_at_ to the node _cat_ 
+
+then, when we meet the word _cot_ we create 3 new edges :
+- from _co\__ to _cot_
+- from _c\_t_ to _cot_
+- from _\_ot_ to _cot_ 
+
+and now the the edge _c\_t_ has egdes to _cat_ and _cot_, which means that the node _cot_ can be found from the node _cat_.
+
+
+
+![cat and cot](/images/cat-cot.png)
+
+We can create a graph that includes words and groups, where an edge between an word and a group means belonging. 
+Such a graph can be built with a dictionary:
 ```
-{ CA$→[CAB,CAT]
-, CO$→[COG,COT]
-, C$T→[CAT,COT]
-, DA$→[DAB,DAG,DAM]
-, DO$→[DOC,DOG,DOT]
-, D$G→[DAG,DOG]
-, $AB→[CAB,DAB]
-, $OG→[COG,DOG]
-, $OT→[COT,DOT] }
+build-graph(list Words)
+    dictionary Graph ← empty
+    for Word in Words do
+        insert key Word, value ∅ in the Graph
+        for (index I,char C) in Word do
+            word Group ← replace position I by '_' in Word
+            if Group is not in Graph then insert key Group, [] in Graph
+            Words ← lookup key Group in Graph
+            append Word to Words
+            udate key Group, value Words in Graph
+        end
+    end
+    return Graph
+end
 ```
-The dictionary grants a faster access than the searching of a list. To find the neighbors of a given word, we follow this method:
-- generate all the neighbor groups of this word,
-- for each group present in the dictionary, list its associated words that are different from the source word
 
-Example, the word CAT generates the group $AT, C$T and CA$.
-The group $AT doesn't exist (it would contain only CAT)
-The neighbors of CAT are CAB and COT
+With construction, we can finding the adjacent words of a word is done by looking at each groups the word belongs to:
+```
+neighbors(word Word, dictionary Graph)
+    list Result ← []
+    Groups ← lookup key Word in Graph
+    for Group in Groups do
+        Neighbors ← lookup key Group in Graph
+        for Neighbor in Neighbors do
+            if Neighbor ≠ Word then append Neighbor into Result
+        end
+    end
+    return Result
+end
+```
 

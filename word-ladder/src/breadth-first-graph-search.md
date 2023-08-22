@@ -22,7 +22,7 @@ The solution is: { _cat_, _cot_, _cog_, _dog_ }.
 
 ![example with label](/images/example-with-label.png)
 
-We can translate this approach into peusod code:
+We can translate this approach into pseudo code:
 
 ```
 word-ladder(word Source, word Target, dictionary Graph)
