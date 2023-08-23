@@ -23,4 +23,10 @@ T{ .( adding words from a file ) CR
     S" ZOOMS" WORD-EXIST? TRUE ?S
     S" FUBAR" WORD-EXIST? FALSE ?S
 }T
+T{ .( two words are adjacent if they are the same size and differ by only one letter ) CR
+    S" DOG" S" HORSE" ADJACENT? FALSE ?S
+    S" DOG" S" FOG" ADJACENT? TRUE ?S
+    S" DOG" S" DOG" ADJACENT? FALSE ?S
+}T
+
 BYE

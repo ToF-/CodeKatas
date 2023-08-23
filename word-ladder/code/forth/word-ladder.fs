@@ -37,6 +37,26 @@ WORD-BUFFER NEXT-WORD !
         (WORD-EXIST?)
     THEN ;
 
+: SAME-SIZE? ( addr,count,addr,count -- f )
+    NIP ROT DROP = ;
+
+: (ADJACENT?) ( addr,count,addr,count -- f )
+    DROP -ROT 0 -ROT 
+    OVER + SWAP DO
+        OVER C@ I C@ <> IF 1+ THEN
+        SWAP 1+ SWAP
+    LOOP 
+    NIP
+    1 = ;
+
+: ADJACENT? ( addr,count,addr,count )
+    2OVER 2OVER SAME-SIZE? IF
+        (ADJACENT?)
+    ELSE
+        2DROP 2DROP FALSE
+    THEN ;
+
+
 1000 CONSTANT LINE-MAX
 CREATE LINE-BUFFER LINE-MAX ALLOT
 
@@ -49,3 +69,18 @@ CREATE LINE-BUFFER LINE-MAX ALLOT
         LINE-BUFFER SWAP ADD-WORD
     REPEAT DROP
     CLOSE-FILE THROW ;
+
+: .(ADJACENTS) 
+    NEXT-WORD @ WORD-BUFFER DO
+        I COUNT 2DUP TYPE SPACE [CHAR] { EMIT SPACE
+        NEXT-WORD @ WORD-BUFFER DO
+            I COUNT 2OVER 2OVER
+            ADJACENT? IF TYPE SPACE ELSE 2DROP THEN
+            I C@ 1+ 
+        +LOOP
+        [CHAR] } EMIT CR
+        NIP 1+
+    +LOOP ;
+
+: .ADJACENTS
+    DICTIONARY-EMPTY? 0= IF .(ADJACENTS) THEN ;
