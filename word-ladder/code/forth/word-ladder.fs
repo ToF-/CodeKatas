@@ -2,6 +2,77 @@
 50000 CONSTANT MAX-WORDS
 
 
+: AA-CREATE ( <name> u -- )
+    CREATE DUP , 0 , CELLS 2* ALLOT ;
+
+: AA-CAPACITY ( aa - n )
+    @ ;
+
+: AA-SIZE ( aa -- n )
+    CELL+ @ ;
+
+: AA-CELLS ( aa -- ad )
+    2 CELLS + ;
+
+: AA-EMPTY? ( aa -- f )
+    AA-SIZE 0= ;
+
+: AA-EMPTY ( aa -- )
+    CELL+ OFF ;
+
+: AA-NEXT! ( aa -- )
+    CELL+ 1 SWAP +! ;
+
+: AA-CAPACITY? ( ar -- f )
+    DUP AA-SIZE 1+
+    SWAP AA-CAPACITY < ;
+
+: AA-NEXT ( aa -- adr )
+    DUP AA-CELLS
+    SWAP AA-SIZE 2* CELLS + ;
+
+: (AA-FIND) ( k,aa -- ad|0)
+    DUP AA-NEXT SWAP AA-CELLS
+    0 -ROT DO
+        OVER I @ = IF
+            DROP I LEAVE
+        THEN
+    2 CELLS +LOOP
+    NIP ;
+        
+: AA-FIND ( k,aa -- v|f )
+    DUP AA-EMPTY? IF
+        2DROP FALSE
+    ELSE
+        (AA-FIND) ?DUP IF 
+            CELL+ @ TRUE
+        ELSE
+            FALSE
+        THEN 
+    THEN ;
+
+: (AA-ADD) ( v,k,aa -- )
+    DUP AA-CAPACITY? IF
+        DUP AA-NEXT      
+        ROT OVER !      
+        ROT SWAP CELL+ ! 
+        AA-NEXT! 
+    ELSE
+        2DROP
+        S" aa-add: out of capacity"
+    THEN ;
+
+: AA-ADD-UPDATE ( v,k,aa )
+    DUP AA-EMPTY? IF
+        (AA-ADD)
+    ELSE
+        2DUP (AA-FIND) ?DUP IF
+            -ROT 2DROP CELL+ !
+        ELSE
+            (AA-ADD)
+        THEN
+    THEN ;
+
 : AR-CREATE ( <name> u -- )
     CREATE DUP , 0 , CELLS ALLOT ;
 

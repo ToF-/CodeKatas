@@ -58,5 +58,23 @@ T{ .( after finding neighbors, array contains neigbors ) CR
     S" evil" my-list my-array WL-NEIGHBORS
     my-array AR-SIZE 0 ?S
 }T
+T{ .( after creation associative array is empty ) CR
+    256 AA-CREATE my-assoc
+    my-assoc AA-EMPTY? TRUE ?S
+}T
+T{ .( after adding or update a key/value value can be found ) CR
+    2317 4807 my-assoc AA-ADD-UPDATE
+    4807 my-assoc AA-FIND TRUE ?S 2317 ?S
+}T
+T{ .( after emptying assoc array values cannot be found ) CR
+    my-assoc AA-EMPTY
+    4807 my-assoc AA-FIND FALSE ?S
+}T
+T{ .( after updating an assoc array key value value is repladed ) CR
+    2317 4807 my-assoc AA-ADD-UPDATE
+    4807 my-assoc AA-FIND TRUE ?S 2317 ?S
+    1723 4807 my-assoc AA-ADD-UPDATE
+    4807 my-assoc AA-FIND TRUE ?S 1723 ?S
+}T
 
 BYE
