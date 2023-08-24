@@ -23,6 +23,9 @@
 : AA-EMPTY? ( aa -- f )
     AA-SIZE 0= ;
 
+: AA-EMPTY ( aa -- )
+    CELL+ OFF ;
+
 : AA-CONTENT ( aa -- adr )
     CELL+ CELL+ ;
 
@@ -51,6 +54,12 @@
     ELSE
         FALSE
     THEN ;
+
+: AA-NTH ( n,aa -- v,k )
+    OVER OVER AA-SIZE >= IF
+        S" aa-nth: out of bounds" EXCEPTION THROW
+    THEN
+    AA-CONTENT SWAP AA-CELLS + 2@ ;
 
 : AA-CAPACITY-CHECK ( aa -- )
     DUP AA-SIZE
@@ -90,7 +99,8 @@
     AA-CELL +LOOP
     DROP ;
 
-VARIABLE S>CELL-BUFFER
+CREATE S>CELL-BUFFER CELL ALLOT
+CREATE CELL>S-BUFFER CELL ALLOT
 
 : S>CELL ( ad,l -- n )
     DUP 7 > IF 
@@ -100,4 +110,8 @@ VARIABLE S>CELL-BUFFER
     DUP S>CELL-BUFFER C!
     S>CELL-BUFFER 1+ SWAP CMOVE 
     S>CELL-BUFFER @ ;
-    
+
+: CELL>S ( n -- ad,l )
+    CELL>S-BUFFER !
+    CELL>S-BUFFER 8 DUMP
+    CELL>S-BUFFER COUNT ;
