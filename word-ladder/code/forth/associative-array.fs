@@ -20,17 +20,13 @@
     SWAP AA-DATA + ;
 
 : (AA-FIND) ( k,aa -- adr|0 )
-    DUP AA-EMPTY? 0= IF
-        DUP AA-LIMIT SWAP AA-DATA
-        0 -ROT DO
-            OVER I @ = IF
-                DROP I LEAVE
-            THEN
-        2 CELLS +LOOP
-        NIP
-    ELSE
-        2DROP 0
-    THEN ;
+    DUP AA-LIMIT SWAP AA-DATA
+    0 -ROT ?DO
+        OVER I @ = IF
+            DROP I LEAVE
+        THEN
+    2 CELLS +LOOP
+    NIP ;
 
 : AA-FIND ( k,aa -- v,t|f )
     (AA-FIND) ?DUP IF
@@ -44,6 +40,20 @@
     SWAP AA-CAPACITY >= IF
         S" associative array: out of capacity" EXCEPTION THROW
     THEN ;
+
+: (AA-SHIFT) ( aa -- )
+    DUP AA-DATA
+    DUP CELL+ CELL+
+    ROT AA-SIZE 2* CELLS CMOVE> ;
+
+: AA-INSERT ( v,k,aa -- )
+    DUP AA-CAPACITY-CHECK
+    DUP (AA-SHIFT)
+    DUP 2SWAP ROT   \ aa,v,k,aa
+    AA-DATA DUP     \ aa,v,k,adr,adr
+    ROT SWAP !      \ aa,v,adr
+    CELL+ !
+    CELL+ 1 SWAP +! ;
 
 : AA-ADD ( v,k,aa -- )
     DUP AA-CAPACITY-CHECK
@@ -61,19 +71,19 @@
     THEN ;
 
 : AA-EXECUTE ( xt,aa -- )
-    DUP AA-LIMIT SWAP AA-DATA DO
+    DUP AA-LIMIT SWAP AA-DATA ?DO
         DUP I DUP @ SWAP CELL+ @ 
         ROT EXECUTE
     2 CELLS +LOOP
     DROP ;
 
-CREATE S>CELL-BUFFER CELL ALLOT
+VARIABLE S>CELL-BUFFER
 
 : S>CELL ( ad,l -- n )
     DUP 7 > IF 
         s" s>cell : string to long" EXCEPTION THROW 
     THEN
-    S>CELL-BUFFER CELL ERASE
+    S>CELL-BUFFER OFF
     DUP S>CELL-BUFFER C!
     S>CELL-BUFFER 1+ SWAP CMOVE 
     S>CELL-BUFFER @ ;

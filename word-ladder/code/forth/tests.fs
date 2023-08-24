@@ -3,24 +3,44 @@ REQUIRE ffl/tst.fs
 REQUIRE associative-array.fs
 PAGE
 
+HEX
+FFFF CONSTANT val1
+1111 CONSTANT val2
+AAAA CONSTANT val3
+
+1001 CONSTANT key1
+2002 CONSTANT key2
+2003 CONSTANT key3
+DECIMAL
+
 T{ .( after creation assoc array is empty ) CR
     100 AA-CREATE my-assoc
     my-assoc AA-SIZE 0 ?S
     my-assoc AA-EMPTY? ?TRUE
+    4807 my-assoc AA-FIND ?FALSE
 }T
 
+
 T{ .( after adding a key and value, array is not empty ) CR
-    2317 4807 my-assoc AA-ADD
+    val1 key1 my-assoc AA-ADD
     my-assoc AA-SIZE 1 ?S
     my-assoc AA-EMPTY? ?FALSE
 }T
 T{ .( after adding a key and value, value can be found ) CR
-    4807 my-assoc AA-FIND ?TRUE 2317 ?S
+    key1 my-assoc AA-FIND ?TRUE val1 ?S
 }T
 T{ .( after updating a value for a key, the value can be added ) CR
-    4096 my-assoc AA-FIND ?FALSE
-    1001 4096 my-assoc AA-UPDATE
-    4096 my-assoc AA-FIND ?TRUE 1001 ?S
+    key2 my-assoc AA-FIND ?FALSE
+    val2 key2 my-assoc AA-UPDATE
+    key2 my-assoc AA-FIND ?TRUE val2 ?S
+}T
+
+T{ .( after inserting a value for a key, all other keys and values shift forward ) CR
+    my-assoc 128 dump
+    val3 key3 my-assoc AA-INSERT
+    my-assoc AA-SIZE 3 ?S
+    key3 my-assoc AA-FIND ?TRUE val3 ?S
+    my-assoc 128 dump
 }T
 
 1 AA-CREATE small
@@ -47,7 +67,7 @@ VARIABLE accum
 T{ .( executing a word should execute a routine for each key/value ) CR
     accum OFF
     ' add-kv my-assoc AA-EXECUTE
-    accum @ 4807 2317 + 4096 1001 + + ?S
+    accum @ 134080 ?S 
 }T
 
 T{ .( storing a short string as a cell value ) CR
