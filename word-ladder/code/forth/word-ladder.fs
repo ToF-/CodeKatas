@@ -68,11 +68,11 @@
 : WL-CAPACITY? ( u,wl -- f )
     DUP CELL+ @ ROT 1+ + SWAP @ < ;
 
-: WL>WORDS ( wl -- adr )
+: WL-WORDS ( wl -- adr )
     2 CELLS + ;
 
 : WL-NEXT ( wl -- adr )
-    DUP WL>WORDS SWAP CELL+ @ + ;
+    DUP WL-WORDS SWAP CELL+ @ + ;
 
 : WL-NEXT! ( u,wl -- adr )
     SWAP 1+ SWAP
@@ -95,7 +95,7 @@
 
 : (WL-FIND) ( adr,u,wl -- ad|f )
     DUP WL-NEXT
-    SWAP WL>WORDS
+    SWAP WL-WORDS
     FALSE -ROT DO
         DROP 2DUP
         I COUNT COMPARE IF
@@ -144,6 +144,20 @@ CREATE LINE-BUFFER LINE-MAX ALLOT
     ELSE
         2DROP 2DROP FALSE
     THEN ;
+
+: WL-NEIGHBORS ( adr,u,wl,ar -- )
+   DUP AR-EMPTY
+   SWAP DUP WL-NEXT
+   SWAP WL-WORDS DO
+        -ROT 2DUP I COUNT 
+        ADJACENT? IF
+            ROT I OVER AR-ADD
+        ELSE
+            ROT
+        THEN
+        I C@ 1+
+    +LOOP 
+    DROP 2DROP ;
 
 \ : .(ADJACENTS)
 \     NEXT-WORD @ MAIN-LIST DO

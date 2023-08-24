@@ -52,5 +52,11 @@ T{ .( after emptying array, value cannot be found ) CR
     my-array AR-EMPTY
     17 my-array AR-EXIST? FALSE ?S
 }T
+T{ .( after finding neighbors, array contains neigbors ) CR
+    S" dog" my-list my-array WL-NEIGHBORS
+    my-array AR-SIZE 11 ?S
+    S" evil" my-list my-array WL-NEIGHBORS
+    my-array AR-SIZE 0 ?S
+}T
 
 BYE
