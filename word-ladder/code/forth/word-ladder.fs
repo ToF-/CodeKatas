@@ -2,7 +2,61 @@
 50000 CONSTANT MAX-WORDS
 
 
-: WL-CREATE ( <name> u )
+: AR-CREATE ( <name> u -- )
+    CREATE DUP , 0 , CELLS ALLOT ;
+
+: AR-SIZE ( ar -- n )
+    CELL + @ ;
+
+: AR-CAPACITY ( ar -- n )
+    @ ;
+
+: AR-CELLS ( ar -- addr )
+    2 CELLS + ;
+
+: AR-EMPTY? ( ar -- f )
+    AR-SIZE 0= ;
+
+: AR-EMPTY ( ar -- )
+    CELL + OFF ;
+
+: AR-CAPACITY? ( ar -- f )
+    DUP AR-SIZE 1+
+    SWAP AR-CAPACITY < ;
+
+: AR-NEXT ( ar -- addr )
+    DUP AR-CELLS
+    SWAP AR-SIZE CELLS + ;
+
+: AR-NEXT! ( ar -- )
+    CELL+ 1 SWAP +! ;
+
+: (AR-ADD) ( n,ar -- )
+    DUP AR-NEXT
+    SWAP AR-NEXT!
+    ! ;
+
+: AR-ADD ( n,ar -- )
+    DUP AR-CAPACITY? IF
+        (AR-ADD)
+    ELSE
+        2DROP
+        S" ar-add: out of capacity"
+    THEN ;
+
+: AR-EXIST? ( n,ar -- )
+    DUP AR-EMPTY? IF
+        2DROP FALSE
+    ELSE
+        DUP AR-NEXT SWAP AR-CELLS 0 -ROT
+        DO
+            OVER I @ = IF
+                DROP TRUE
+                LEAVE
+            THEN
+        CELL +LOOP NIP
+    THEN ;
+: WL-CREATE ( <name> u -- )
     CREATE DUP , 0 , ALLOT ;
 
 : WL-EMPTY? ( wl -- f )
@@ -74,26 +128,23 @@ CREATE LINE-BUFFER LINE-MAX ALLOT
     REPEAT DROP
     CLOSE-FILE THROW R> DROP ;
 
+: (ADJACENT?) ( adr,u,adr,u -- f )
+    OVER + SWAP ROT DROP
+    0 -ROT DO
+        OVER C@ I C@ <> IF 1+ THEN
+        SWAP 1+ SWAP
+    LOOP
+    NIP
+    1 = ;
 
-\ : SAME-SIZE? ( addr,count,addr,count -- f )
-\     NIP ROT DROP = ;
-\ 
-\ : (ADJACENT?) ( addr,count,addr,count -- f )
-\     DROP -ROT 0 -ROT
-\     OVER + SWAP DO
-\         OVER C@ I C@ <> IF 1+ THEN
-\         SWAP 1+ SWAP
-\     LOOP
-\     NIP
-\     1 = ;
-\ 
-\ : ADJACENT? ( addr,count,addr,count )
-\     2OVER 2OVER SAME-SIZE? IF
-\         (ADJACENT?)
-\     ELSE
-\         2DROP 2DROP FALSE
-\     THEN ;
-\ 
+: ADJACENT? ( adr,u,adr,u )
+    ROT 2DUP 2>R -ROT
+    2R> = IF
+        (ADJACENT?)
+    ELSE
+        2DROP 2DROP FALSE
+    THEN ;
+
 \ : .(ADJACENTS)
 \     NEXT-WORD @ MAIN-LIST DO
 \         I COUNT 2DUP TYPE SPACE [CHAR] { EMIT SPACE
