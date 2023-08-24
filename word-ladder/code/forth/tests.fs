@@ -3,10 +3,23 @@ REQUIRE ffl/tst.fs
 REQUIRE word-ladder.fs
 PAGE
 
-256 WORD-LIST MAIN
-T{ .( clear dictionnary, not finding any word ) CR
-    S" DOG" MAIN FIND-WORD-L FALSE ?S
+T{ .( after creation wl is empty ) CR
+    256 WL-CREATE my-list
+    my-list WL-EMPTY? TRUE ?S
 }T
+T{ .( when empty wl cannot find a word ) CR
+    S" DOG" my-list WL-FIND FALSE ?S 
+}T
+T{ .( after adding a word, wl can find the word ) CR
+    S" DOG" my-list  WL-ADD 
+    S" DOG" my-list WL-FIND
+    COUNT S" DOG" ?STR
+}T
+BYE 
+T{ .( clear dictionnary, not finding any word ) CR
+    S" DOG" my-list WL-FIND FALSE ?S
+}T
+BYE
 T{ .( adding words, finding the words exist ) CR
     MAIN WORD-LIST-CLEAR
     S" DOG" MAIN dbg ADD-WORD-L

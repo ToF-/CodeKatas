@@ -1,7 +1,63 @@
 \ word-ladder.fs
 50000 CONSTANT MAX-WORDS
 
-: WORD-LIST ( <ńame> u -- addr )
+
+: WL-CREATE ( <name> u )
+    CREATE DUP , 0 , ALLOT ; 
+
+: WL-EMPTY? ( wl -- f )
+    2 CELLS + @ 0= ;
+
+: WL-CAPACITY? ( u,wl -- f )
+    DUP CELL+ @ ROT 1+ + SWAP @ < ;
+
+: WL>WORDS ( wl -- adr )
+    2 CELLS + ;
+
+: WL-NEXT ( wl -- adr )
+    DUP WL>WORDS SWAP CELL+ @ + ;
+    
+: WL-NEXT! ( u,wl -- adr )
+    SWAP 1+ SWAP
+    CELL+ +! ;
+        
+: (WL-ADD) ( adr,u,wl -- )
+    2>R
+    2R@ WL-NEXT 2DUP C!
+    1+ SWAP CMOVE
+    2R> WL-NEXT! ;
+
+: WL-ADD ( adr,u,wl -- )
+    2DUP WL-CAPACITY? IF
+       (WL-ADD) 
+    ELSE
+        DROP 2DROP
+        S" wl-add: out of capacity" 
+        EXCEPTION THROW
+    THEN ;
+
+: (WL-FIND) ( adr,u,wl -- ad|f )
+    DUP WL-NEXT
+    SWAP WL>WORDS
+    FALSE -ROT DO
+        DROP 2DUP 
+        I COUNT COMPARE IF
+            FALSE
+        ELSE
+            I LEAVE
+        THEN
+        I C@ 1+
+    +LOOP
+    -ROT 2DROP ; 
+    
+: WL-FIND ( adr,u,wl -- ad|f )
+    DUP WL-EMPTY? IF
+        DROP 2DROP FALSE
+    ELSE
+        (WL-FIND)
+    THEN ;
+
+: WORD-LIST ( <name> u -- addr )
     CREATE HERE 2 CELLS + OVER + , HERE CELL + ,
     ALLOT ;
 
