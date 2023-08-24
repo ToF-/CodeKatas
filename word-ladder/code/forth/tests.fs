@@ -1,5 +1,48 @@
 \ tests.fs
 REQUIRE ffl/tst.fs
+REQUIRE associative-array.fs
+PAGE
+
+T{ .( after creation assoc array is empty ) CR
+    100 AA-CREATE my-assoc
+    my-assoc AA-SIZE 0 ?S
+    my-assoc AA-EMPTY? ?TRUE
+}T
+
+T{ .( after adding a key and value, array is not empty ) CR
+    2317 4807 my-assoc AA-ADD
+    my-assoc AA-SIZE 1 ?S
+    my-assoc AA-EMPTY? ?FALSE
+}T
+T{ .( after adding a key and value, value can be found ) CR
+    4807 my-assoc AA-FIND ?TRUE 2317 ?S
+}T
+T{ .( after updating a value for a key, the value can be added ) CR
+    4096 my-assoc AA-FIND ?FALSE
+    1001 4096 my-assoc AA-UPDATE
+    4096 my-assoc AA-FIND ?TRUE 1001 ?S
+}T
+
+1 AA-CREATE small
+: TRY-ADD
+    FALSE
+    TRY
+        2317 4807 small AA-ADD
+        1001 4096 small AA-ADD
+        IFERROR
+            DROP TRUE
+        THEN
+    ENDTRY ;
+
+T{ .( crossing the capacity limit should raise an execption ) CR
+    TRY-ADD ?TRUE
+    DROP
+}T
+: .AA-KV 
+    . . CR ;
+
+' .AA-KV my-assoc AA-EXECUTE 
+BYE
 REQUIRE word-ladder.fs
 PAGE
 
