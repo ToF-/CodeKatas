@@ -67,3 +67,14 @@
     2 CELLS +LOOP
     DROP ;
 
+CREATE S>CELL-BUFFER CELL ALLOT
+
+: S>CELL ( ad,l -- n )
+    DUP 7 > IF 
+        s" s>cell : string to long" EXCEPTION THROW 
+    THEN
+    S>CELL-BUFFER CELL ERASE
+    DUP S>CELL-BUFFER C!
+    S>CELL-BUFFER 1+ SWAP CMOVE 
+    S>CELL-BUFFER @ ;
+    

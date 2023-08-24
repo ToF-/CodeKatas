@@ -38,10 +38,26 @@ T{ .( crossing the capacity limit should raise an execption ) CR
     TRY-ADD ?TRUE
     DROP
 }T
-: .AA-KV 
-    . . CR ;
 
-' .AA-KV my-assoc AA-EXECUTE 
+VARIABLE accum
+: add-kv ( v,k -- n )
+    accum +!
+    accum +! ;
+
+T{ .( executing a word should execute a routine for each key/value ) CR
+    accum OFF
+    ' add-kv my-assoc AA-EXECUTE
+    accum @ 4807 2317 + 4096 1001 + + ?S
+}T
+
+T{ .( storing a short string as a cell value ) CR
+    S" FooBar" S>CELL 032195085310313990 ?S
+    S" Foo" S>CELL 1869563395 ?S
+    S" Bar" S>CELL 1918976515 ?S
+    S" " S>CELL 0 ?S
+    S"  " S>CELL 8193 ?S
+    S"   " S>CELL 2105346 ?S
+}T
 BYE
 REQUIRE word-ladder.fs
 PAGE
