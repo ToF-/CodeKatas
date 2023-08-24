@@ -6,26 +6,43 @@
 : AA-SIZE ( aa -- n )
     CELL+ @ ;
 
+2 CELLS CONSTANT AA-CELL
+
+: AA-CELLS ( -- n )
+    2* CELLS ;
+
+: AA-CELL! ( v,k,adr -- )
+    2! ;
+
+: AA-CELL@ ( adr -- v,k )
+    2@ ;
+
 : AA-CAPACITY ( aa - n )
     @ ;
 
 : AA-EMPTY? ( aa -- f )
     AA-SIZE 0= ;
 
-: AA-DATA ( aa -- adr )
-    2 CELLS + ;
+: AA-CONTENT ( aa -- adr )
+    CELL+ CELL+ ;
+
+: AA-NEXT ( adr -- adr )
+    AA-CELL + ;
 
 : AA-LIMIT ( aa -- adr )
-    DUP AA-SIZE 2* CELLS 
-    SWAP AA-DATA + ;
+    DUP AA-SIZE AA-CELLS
+    SWAP AA-CONTENT + ;
+
+: AA-SIZE++ ( aa -- )
+    CELL+ 1 SWAP +! ;
 
 : (AA-FIND) ( k,aa -- adr|0 )
-    DUP AA-LIMIT SWAP AA-DATA
+    DUP AA-LIMIT SWAP AA-CONTENT
     0 -ROT ?DO
         OVER I @ = IF
             DROP I LEAVE
         THEN
-    2 CELLS +LOOP
+    AA-CELL +LOOP
     NIP ;
 
 : AA-FIND ( k,aa -- v,t|f )
@@ -42,39 +59,35 @@
     THEN ;
 
 : (AA-SHIFT) ( aa -- )
-    DUP AA-DATA
-    DUP CELL+ CELL+
-    ROT AA-SIZE 2* CELLS CMOVE> ;
+    DUP AA-CONTENT
+    DUP AA-NEXT
+    ROT AA-SIZE AA-CELLS CMOVE> ;
 
 : AA-INSERT ( v,k,aa -- )
     DUP AA-CAPACITY-CHECK
     DUP (AA-SHIFT)
-    DUP 2SWAP ROT   \ aa,v,k,aa
-    AA-DATA DUP     \ aa,v,k,adr,adr
-    ROT SWAP !      \ aa,v,adr
-    CELL+ !
-    CELL+ 1 SWAP +! ;
+    DUP 2SWAP ROT
+    AA-CONTENT AA-CELL!
+    AA-SIZE++ ;
 
 : AA-ADD ( v,k,aa -- )
     DUP AA-CAPACITY-CHECK
-    DUP AA-LIMIT >R  \ v,k,aa
-    -ROT R@ !
-    R> CELL+ !
-    CELL+ 1 SWAP +! ;
+    DUP 2SWAP ROT
+    AA-LIMIT AA-CELL!
+    AA-SIZE++ ;
 
 : AA-UPDATE ( v,k,aa -- )
     2DUP (AA-FIND) ?DUP IF
-        -ROT 2DUP
-        CELL+ !
+        NIP AA-CELL!
     ELSE
         AA-ADD
     THEN ;
 
 : AA-EXECUTE ( xt,aa -- )
-    DUP AA-LIMIT SWAP AA-DATA ?DO
-        DUP I DUP @ SWAP CELL+ @ 
+    DUP AA-LIMIT SWAP AA-CONTENT ?DO
+        DUP I AA-CELL@
         ROT EXECUTE
-    2 CELLS +LOOP
+    AA-CELL +LOOP
     DROP ;
 
 VARIABLE S>CELL-BUFFER

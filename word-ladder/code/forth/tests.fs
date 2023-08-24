@@ -33,14 +33,16 @@ T{ .( after updating a value for a key, the value can be added ) CR
     key2 my-assoc AA-FIND ?FALSE
     val2 key2 my-assoc AA-UPDATE
     key2 my-assoc AA-FIND ?TRUE val2 ?S
+    77777777 key2 my-assoc AA-UPDATE
+    key2 my-assoc AA-FIND ?TRUE 77777777 ?S
+    val2 key2 my-assoc AA-UPDATE
+
 }T
 
 T{ .( after inserting a value for a key, all other keys and values shift forward ) CR
-    my-assoc 128 dump
     val3 key3 my-assoc AA-INSERT
     my-assoc AA-SIZE 3 ?S
     key3 my-assoc AA-FIND ?TRUE val3 ?S
-    my-assoc 128 dump
 }T
 
 1 AA-CREATE small
