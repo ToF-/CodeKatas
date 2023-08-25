@@ -1,16 +1,21 @@
 strict graph ip_map {
     node [colorscheme="SVG",width=0.5,height=0.2,shape = ellipse,fontcolor="darkcyan",fontsize=12,fontname="Courier",color="darkcyan"];
     edge [colorscheme="SVG",color="darkcyan",fontcolor="darkcyan",fontsize=10,fontname="Courier"];
-    cab -- { cat };
-    cab -- { dab };
-    cat -- { cot };
-    cog -- { cot };
-    cog -- { dog };
-    cot -- { dot };
-    dab -- { dag };
-    dab -- { dam };
-    dag -- { dam };
-    dag -- { dog };
-    doc -- { dog };
-    dog -- { dot };
+ace;
+bet;
+bit;
+cat;
+cab;
+cog;
+cot;
+dab;
+dam;
+doc;
+dog;
+dot;
+eel;
+fog;
+kit;
+owl;
+set;
 }

@@ -7,8 +7,7 @@ Examples :
 > ladder 3-letter-words.txt DOG CAT
 DOG DOT COT CAT
 
-> ladder 4-letter-words.txt WARM COLD
-WARM WARD CARD CORD COLD
+> ladder 4-letter-words.txt WARM COLDWARM WARD CARD CORD COLD
 ```
 
 

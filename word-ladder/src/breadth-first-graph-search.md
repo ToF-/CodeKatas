@@ -1,9 +1,9 @@
 # Breadth-First Graph Search
 An interesting way of designing a solution for this problem is to try to solve it by hand on a small data set. 
 
-Let's suppose we are given a list that is limited to 9 words : _cat_, _cab_, _cog_, _cot_, _dab_, _dam_, _doc_, _dog_, _dot_.
+let's suppose we are given a list that is limited to 9 words : _cat_, _cab_, _cog_, _cot_, _dab_, _dam_, _doc_, _dog_, _dot_.
 
-We want to find the shortest path between the words _cat_ and _dog_.
+we want to find the shortest path between the words _cat_ and _dog_.
 
 On a sheet of paper we form a graph where the nodes are words and edges are traced betwen words that differ by one and only one letter.
 
