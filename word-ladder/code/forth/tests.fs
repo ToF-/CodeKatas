@@ -47,6 +47,7 @@ T{ .( words can be read from a file into a dictionary. ) CR
 
 dict ACT-CLEAR
 s" small.txt" dict READ-WORDS
+    dict .WORD-DICTIONARY
 
 T{ .( after visiting the word, the word is visited. ) CR
     KEY" eel" dict FIND-WORD ?TRUE ?FALSE
