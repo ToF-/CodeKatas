@@ -35,5 +35,12 @@ T{ .( words can be added in and retrieved from a word dictionary. ) CR
     s" dog" dict FIND-WORD ?TRUE 4096 ?S
     dict ACT-LENGTH@ 2 ?S
 }T
+
+T{ .( words can be read from a file into a dictionary. ) CR
+    s" sample.txt" dict READ-WORDS
+    s" bee" dict FIND-WORD ?TRUE DROP
+    s" wax" dict FIND-WORD ?TRUE DROP
+}T
+
 BYE
 
