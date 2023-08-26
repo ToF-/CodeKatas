@@ -117,10 +117,18 @@ ACT-CREATE VISIT-PATH
     SWAP 0= IF      \ ad,t,k
         (ADJACENT-WORD!)
     ELSE
-        2DROP
+        DROP
     THEN ;
     
+: VISIT-ADJACENTS-WORDS ( limit,start,dict -- )
+    -ROT ?DO 
+        DUP  I @ ROT VISIT-WORD 
+    CELL +LOOP DROP ;
+    
 : FIND-ADJACENT-WORDS ( k,dict,ad -- n )
+    OVER >R
     DUP 2SWAP ['] ADJACENT-WORD! SWAP ACT-EXECUTE
-    DROP SWAP - CELL / ;
+    DROP SWAP
+    2DUP R> VISIT-ADJACENTS-WORDS
+    - CELL / ;
     

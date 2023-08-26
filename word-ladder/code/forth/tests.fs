@@ -66,8 +66,14 @@ T{ .( after clearing word values all words values are set fo false. ) CR
 
 CREATE keys 10 CELLS ALLOT
 
-T{ .( after searching adjacent words, the keys are stored   ) CR
+T{ .( after searching adjacent words, the keys are stored. ) CR
     KEY" cat" dict keys FIND-ADJACENT-WORDS 2 ?S
+    keys @ pad KEY>S S" cab" ?STR
+    keys cell+ @ pad KEY>S S" cot" ?STR
+}T
+
+T{ .( words that were found to be adjacent are not searched again. ) CR  
+    KEY" cat" dict keys  FIND-ADJACENT-WORDS 0 ?S
 }T
 BYE
 
