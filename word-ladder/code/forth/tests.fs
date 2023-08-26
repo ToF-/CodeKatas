@@ -73,7 +73,9 @@ T{ .( after searching adjacent words, the keys are stored. ) CR
 }T
 
 T{ .( words that were found to be adjacent are not searched again. ) CR  
-    KEY" cat" dict keys  FIND-ADJACENT-WORDS 0 ?S
+    KEY" cat" dict keys FIND-ADJACENT-WORDS 0 ?S
+    KEY" dab" dict keys  FIND-ADJACENT-WORDS 1 ?S
+    keys @ pad KEY>S s" dam" ?STR
 }T
 BYE
 
