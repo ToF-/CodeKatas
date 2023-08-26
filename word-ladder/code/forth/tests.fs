@@ -17,7 +17,23 @@ T{ .( a string of at most 7 chars can get stored on a single cell as a key. ) CR
 }T
 
 T{ .( a S>KEY cell can be converted back into a string on the pad. ) CR
-    s" slope" S>KEY KEY>S s" slope" ?STR
+    s" slope" S>KEY pad KEY>S s" slope" ?STR
+}T
+
+T{ .( two S>KEYs are adjacent if their string are.) CR
+    s" dog" S>KEY s" fog" S>KEY KEY-ADJACENT? ?TRUE
+    s" bag" S>KEY s" fog" S>KEY KEY-ADJACENT? ?FALSE
+}T
+
+T{ .( words can be added in and retrieved from a word dictionary. ) CR
+    WORD-DICTIONARY dict
+    s" dog" dict FIND-WORD ?FALSE
+    4807 s" dog" dict ADD-WORD
+    s" dog" dict FIND-WORD ?TRUE 4807 ?S
+    1000 s" cat" dict ADD-WORD
+    4096 s" dog" dict ADD-WORD
+    s" dog" dict FIND-WORD ?TRUE 4096 ?S
+    dict ACT-LENGTH@ 2 ?S
 }T
 BYE
 

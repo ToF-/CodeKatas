@@ -1,4 +1,5 @@
 \ wordladder.fs
+REQUIRE ffl/act.fs
 
 : (ADJACENT?) ( ad1,ad2,l -- f )
     OVER + SWAP 2>R
@@ -19,6 +20,7 @@
     THEN ;
 
 CREATE S>KEY-BUFFER CELL ALLOT
+CREATE EXTRA-S>KEY-BUFFER CELL ALLOT
 
 : (S>KEY) ( ad,l -- u )
     S>KEY-BUFFER DUP CELL ERASE
@@ -32,7 +34,22 @@ CREATE S>KEY-BUFFER CELL ALLOT
         2DROP 0
     THEN ;
 
-: KEY>S ( u -- pad+1,l )
-    PAD DUP CELL ERASE
+: KEY>S ( u,ad -- ad+1,l )
+    DUP CELL ERASE
     TUCK !
     COUNT ;
+
+: KEY-ADJACENT? ( u,v -- f )
+    S>KEY-BUFFER KEY>S
+    ROT EXTRA-S>KEY-BUFFER KEY>S
+    ADJACENT? ;
+
+: WORD-DICTIONARY ( <name> -- )
+    ACT-CREATE ;
+
+: FIND-WORD ( ad,l,dict -- v,k|f )
+    -ROT S>KEY SWAP ACT-GET ;
+
+: ADD-WORD ( v,ad,l,dict -- )
+    -ROT S>KEY SWAP ACT-INSERT ;
+    
