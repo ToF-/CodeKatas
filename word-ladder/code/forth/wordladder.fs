@@ -131,4 +131,16 @@ ACT-CREATE VISIT-PATH
     DROP SWAP
     2DUP R> VISIT-ADJACENTS-WORDS
     - CELL / ;
-    
+
+: (.LADDER) ( path,k -- )
+    DUP IF
+        DUP PAD KEY>S TYPE SPACE
+        OVER FIND-WORD DROP
+        RECURSE
+    ELSE
+        2DROP
+    THEN ;
+
+: .LADDER ( k,path -- )
+    SWAP (.LADDER) ;
+

@@ -77,5 +77,15 @@ T{ .( words that were found to be adjacent are not searched again. ) CR
     KEY" dab" dict keys  FIND-ADJACENT-WORDS 1 ?S
     keys @ pad KEY>S s" dam" ?STR
 }T
+
+ACT-CREATE my-path
+T{ .( path go from target to origin. ) CR
+   0         KEY" dog" my-path act-insert
+   KEY" dog" KEY" cog" my-path act-insert
+   KEY" cog" KEY" cot" my-path act-insert
+   KEY" cot" KEY" cat" my-path act-insert
+   .( should print cat cot cog dog : ) CR
+   KEY" cat" my-path .LADDER 
+}T
 BYE
 
