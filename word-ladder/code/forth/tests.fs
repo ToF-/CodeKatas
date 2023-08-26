@@ -62,6 +62,12 @@ T{ .( after clearing word values all words values are set fo false. ) CR
     KEY" eel" dict FIND-WORD ?TRUE ?FALSE
     KEY" cat" dict FIND-WORD ?TRUE ?FALSE
     KEY" dog" dict FIND-WORD ?TRUE ?FALSE
-}T  
+}T
+
+CREATE keys 10 CELLS ALLOT
+
+T{ .( after searching adjacent words, the keys are stored   ) CR
+    KEY" cat" dict keys FIND-ADJACENT-WORDS 2 ?S
+}T
 BYE
 
