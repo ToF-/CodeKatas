@@ -7,10 +7,8 @@ T{ .(   a string of at most 7 chars can get stored on a single cell as a key. ) 
     s" tractor" S>KEY s" traitor" S>KEY = ?FALSE
     s" blink" S>KEY s" blink" S>KEY ?S
    .(   if the string is too long, a an exception occurs. ) CR
-: recover true ;
-: check-string-too-large-exception
-    s" abracadabra" ['] recover catch S>KEY ;
-    check-string-too-large-exception drop ?TRUE
+: check-string-too-large s" abracadabra" S>KEY ;
+    ' check-string-too-large catch [if] TRUE [then] ?TRUE
 }T
 
 T{ .(   a string as key can be given from input flow.) CR

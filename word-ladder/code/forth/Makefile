@@ -1,3 +1,3 @@
 tests:	
-	gforth test/tests.fs
+	gforth-itc test/tests.fs
 
