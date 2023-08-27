@@ -87,5 +87,12 @@ T{ .( path go from target to origin. ) CR
    .( should print cat cot cog dog : ) CR
    KEY" cat" my-path .LADDER 
 }T
+T{ .( after searching ladder, dictionary is changed. ) CR
+    dict CLEAR-WORD-VALUES
+    KEY" dog" KEY" cat" dict dbg WORD-LADDER
+   .( should print cat cot cog dog : ) CR
+   KEY" cat" dict .LADDER 
+}T
+
 BYE
 
