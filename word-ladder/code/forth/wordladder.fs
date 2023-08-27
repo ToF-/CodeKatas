@@ -140,25 +140,67 @@ VARIABLE KEY-BUFFER-MAX
 
 CREATE VISIT-LIST WORDS-MAX CELLS ALLOT
 VISIT-LIST WORDS-MAX CELLS + CONSTANT VISIT-MAX
-VARIABLE TO-VISIT 
-VARIABLE VISITED
+VARIABLE VISIT-LAST 
+VARIABLE VISIT-NEXT
 
 : (ADD-TO-VISIT) ( key )
-    TO-VISIT @ !
-    CELL TO-VISIT +! ;
+    VISIT-LAST @ !
+    CELL VISIT-LAST +! ;
 
 : ADD-TO-VISIT ( key -- )
-    TO-VISIT @ VISIT-MAX < IF
+    VISIT-LAST @ VISIT-MAX < IF
         (ADD-TO-VISIT)
     ELSE
         S" ADD-TO-VISIT: out of limits"
         EXCEPTION THROW
     THEN ;
 
+: INIT-VISIT-LIST 
+    VISIT-LIST DUP 
+    VISIT-LAST !
+    VISIT-NEXT ! ;
+
+: TO-VISIT? ( -- f )
+    VISIT-NEXT @ VISIT-LAST @ < ;
+
+: END-VISIT ( -- )
+    VISIT-NEXT @ VISIT-LAST ! ;
+    
+: NEXT-TO-VISIT ( -- key )
+    VISIT-NEXT @ @
+    CELL VISIT-NEXT +! ;
+
+: APPEND-TO-VISIT ( key -- )
+    VISIT-LAST @ !
+    CELL VISIT-LAST +! ;
+    
+VARIABLE TARGET 
 : WORD-LADDER ( dest,srce,dict -- )
-    VISIT-LIST TO-VISIT !
-    VISIT-LIST VISITED !
-    ROT DUP ADD-TO-VISIT
+    -ROT
+    TARGET !
+    OVER 0 -ROT ADD-WORD
+    APPEND-TO-VISIT
+    0 SWAP
+    BEGIN                  \ from,dict
+        TO-VISIT? WHILE
+
+        ROT OVER                 \ src,dict,from,dict
+        NEXT-TO-VISIT DUP ROT    \ src,dict,from,key,key,dict
+        ROT OVER APPEND-TO-VISIT   \ src,dict,from,dict,key
+        DUP -ROT >R           \ src,dict,from,key,dict
+        ADD-WORD OVER R@      \ src,dict,src,key
+        = IF
+            END-VISIT
+        ELSE                   \ src,dict
+            R@ OVER TO-VISIT @ \ src,dict,key,dict,list
+            FIND-ADJACENT-WORDS \ src,dict,n
+
+
+        THEN                  \ src,dict
+        >R -ROT               \ from,src,dict
+    REPEAT
+            
+
     DROP 2DROP ;
     
 : .LADDER ( k,path -- )
