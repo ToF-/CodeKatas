@@ -1,26 +1,15 @@
 \ wordladder.fs
+
+\ adjacent? 
+\ s>key key>s key"  
+\ visit-list vl-clear vl-empty? vl-append vl-next
+\ word-graph wg-clear wg-add wg-pred@ wg-prec! wg-clear-preds wg-path wg-adjacents 
+
 REQUIRE ffl/act.fs
 REQUIRE ffl/car.fs
 
 50000 CONSTANT WORDS-MAX
 
-: (ADJACENT?) ( ad1,ad2,l -- f )
-    OVER + SWAP 2>R
-    FALSE SWAP
-    2R> ?DO             \ acc,ad1
-        DUP C@ I C@ <> IF
-           SWAP 1+ SWAP
-        THEN
-        1+
-    LOOP
-    DROP 1 = ;
-
-: ADJACENT? ( ad,l,ad,l -- f )
-    ROT OVER = IF
-        (ADJACENT?)
-    ELSE
-        DROP 2DROP FALSE
-    THEN ;
 
 CREATE S>KEY-BUFFER CELL ALLOT
 CREATE EXTRA-S>KEY-BUFFER CELL ALLOT
@@ -156,3 +145,17 @@ VARIABLE KEY-BUFFER-MAX
 
 : TO-VISIT@ ( arr -- k )
     0 SWAP CAR-DELETE ;
+
+: LADDER-STEP ( t,list,dict -- )
+    OVER DUP TO-VISIT? IF   \ t,l,d,l
+        DUP TO-VISIT@       \ t,l,d,l,k
+        DUP                 \ t,l,d,l,k,k
+        2SWAP               \ t,l,k,k,d,l
+        FIND-ADJACENT-WORDS \
+        2DUP               \ t,l,d,k,d,k
+        SWAP FIND-ADJACENT-WORDS 
+        
+    ELSE
+        2DROP 2DROP
+    THEN
+;

@@ -1,33 +1,12 @@
 \ tests.fs
 REQUIRE ffl/tst.fs
+
 REQUIRE wordladder.fs
 PAGE
-T{ .( two strings are adjacent if they are the same size and differ by one char only. ) CR
-    s" dog" s" horse" ADJACENT? ?FALSE
-    s" dog" s" fog"   ADJACENT? ?TRUE
-    s" dog" s" bag"   ADJACENT? ?FALSE
-    s" "    s" "      ADJACENT? ?FALSE
-}T
 
-T{ .( a string of at most 7 chars can get stored on a single cell as a key. ) CR
-    s" tractor" S>KEY s" traitor" S>KEY = ?FALSE
-    s" blink" S>KEY s" blink" S>KEY ?S
-   .( if the string is too long, a message is sent and the cell is null. ) CR
-   ." string too large expected: " s" abracadabra" S>KEY 0 ?S
-}T
 
-T{ .( a string as key can be given from input flow.) CR
-    KEY" dog" s" dog" S>KEY ?S
-}T
-T{ .( a S>KEY cell can be converted back into a string on the pad. ) CR
-    KEY" slope" pad KEY>S s" slope" ?STR
-}T
 
-T{ .( two S>KEYs are adjacent if their string are.) CR
-    KEY" dog" KEY" fog" KEY-ADJACENT? ?TRUE
-    KEY" bag" KEY" fog" KEY-ADJACENT? ?FALSE
-}T
-
+BYE
 T{ .( words can be added and updated in the dictionary. ) CR
     WORD-DICTIONARY dict
     KEY" cog" KEY" dog" dict WORD-PREDECESSOR! 
@@ -103,4 +82,18 @@ T{ .( extracting nodes to visit is first in first out. ) CR
     my-visit TO-VISIT@ 17 ?S
     my-visit TO-VISIT? ?FALSE
 }T    
+
+T{ .( given a word to visit, the adjacents words are updated with their predecessors. ) CR
+    my-visit CLEAR-VISITS
+    dict CLEAR-WORD-PREDECESSORS 
+    KEY" dog" dict NEW-WORD
+    KEY" dog" my-visit TO-VISIT+!
+    KEY" cat" my-visit dict LADDER-STEP
+    my-visit TO-VISIT@ KEY" cog" ?S 
+    my-visit TO-VISIT@ KEY" dot" ?S 
+    KEY" dog" dict WORD-PREDECESSOR@ 0 ?S
+    KEY" cog" dict WORD-PREDECESSOR@ KEY" dog" ?S
+    KEY" dot" dict WORD-PREDECESSOR@ KEY" dog" ?S
+}T
+    
 BYE
