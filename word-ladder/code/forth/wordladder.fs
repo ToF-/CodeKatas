@@ -1,5 +1,6 @@
 \ wordladder.fs
 REQUIRE ffl/act.fs
+REQUIRE ffl/car.fs
 
 50000 CONSTANT WORDS-MAX
 
@@ -52,7 +53,7 @@ CREATE EXTRA-S>KEY-BUFFER CELL ALLOT
 : WORD-DICTIONARY ( <name> -- )
     ACT-CREATE ;
 
-: FIND-WORD ( k,dict -- v,k|f )
+: FIND-WORD ( k,dict -- v,t|f )
     ACT-GET ;
 
 : ADD-WORD ( v,k,dict -- )
@@ -61,9 +62,12 @@ CREATE EXTRA-S>KEY-BUFFER CELL ALLOT
 : NEW-WORD ( k,dict -- )
     FALSE -ROT ADD-WORD ;
 
-: VISIT-WORD ( k,dict -- )
-    TRUE -ROT ADD-WORD ;
-    
+: WORD-PREDECESSOR! ( p,k,dict -- )
+    ADD-WORD ;
+
+: WORD-PREDECESSOR@ ( k,dict -- p )
+    ACT-GET DROP ;
+
 1024 CONSTANT LINE-MAX
 CREATE LINE-BUFFER LINE-MAX ALLOT
 
@@ -91,7 +95,7 @@ VARIABLE KEY-BUFFER-MAX
     NIP KEY-BUFFER-MAX @ !
     CELL KEY-BUFFER-MAX +! ;
 
-: CLEAR-WORD-VALUES ( dict )
+: CLEAR-WORD-PREDECESSORS ( dict )
     KEY-BUFFER KEY-BUFFER-MAX !
     ['] ADD-KEY-BUFFER OVER ACT-EXECUTE
     KEY-BUFFER-MAX @ KEY-BUFFER ?DO
@@ -138,71 +142,17 @@ VARIABLE KEY-BUFFER-MAX
         OVER FIND-WORD DROP
     REPEAT DROP ;
 
-CREATE VISIT-LIST WORDS-MAX CELLS ALLOT
-VISIT-LIST WORDS-MAX CELLS + CONSTANT VISIT-MAX
-VARIABLE VISIT-LAST 
-VARIABLE VISIT-NEXT
-
-: (ADD-TO-VISIT) ( key )
-    VISIT-LAST @ !
-    CELL VISIT-LAST +! ;
-
-: ADD-TO-VISIT ( key -- )
-    VISIT-LAST @ VISIT-MAX < IF
-        (ADD-TO-VISIT)
-    ELSE
-        S" ADD-TO-VISIT: out of limits"
-        EXCEPTION THROW
-    THEN ;
-
-: INIT-VISIT-LIST 
-    VISIT-LIST DUP 
-    VISIT-LAST !
-    VISIT-NEXT ! ;
-
-: TO-VISIT? ( -- f )
-    VISIT-NEXT @ VISIT-LAST @ < ;
-
-: END-VISIT ( -- )
-    VISIT-NEXT @ VISIT-LAST ! ;
-    
-: NEXT-TO-VISIT ( -- key )
-    VISIT-NEXT @ @
-    CELL VISIT-NEXT +! ;
-
-: APPEND-TO-VISIT ( key -- )
-    VISIT-LAST @ !
-    CELL VISIT-LAST +! ;
-    
-VARIABLE TARGET 
-: WORD-LADDER ( dest,srce,dict -- )
-    -ROT
-    TARGET !
-    OVER 0 -ROT ADD-WORD
-    APPEND-TO-VISIT
-    0 SWAP
-    BEGIN                  \ from,dict
-        TO-VISIT? WHILE
-
-        ROT OVER                 \ src,dict,from,dict
-        NEXT-TO-VISIT DUP ROT    \ src,dict,from,key,key,dict
-        ROT OVER APPEND-TO-VISIT   \ src,dict,from,dict,key
-        DUP -ROT >R           \ src,dict,from,key,dict
-        ADD-WORD OVER R@      \ src,dict,src,key
-        = IF
-            END-VISIT
-        ELSE                   \ src,dict
-            R@ OVER TO-VISIT @ \ src,dict,key,dict,list
-            FIND-ADJACENT-WORDS \ src,dict,n
-
-
-        THEN                  \ src,dict
-        >R -ROT               \ from,src,dict
-    REPEAT
-            
-
-    DROP 2DROP ;
-    
 : .LADDER ( k,path -- )
     SWAP (.LADDER) ;
 
+: CLEAR-VISITS ( arr -- )
+    CAR-CLEAR ;
+
+: TO-VISIT? ( arr -- f )
+    CAR-LENGTH@ 0 > ;
+
+: TO-VISIT+! ( k,arr -- )
+    CAR-APPEND ;
+
+: TO-VISIT@ ( arr -- k )
+    0 SWAP CAR-DELETE ;
