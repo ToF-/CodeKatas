@@ -104,42 +104,44 @@ ACT-CREATE VISIT-PATH
         OVER NEW-WORD
     CELL +LOOP DROP ;
 
-: (ADJACENT-WORD!) ( ad,t,k -- ad )
-    2DUP
-    KEY-ADJACENT? IF
-        ROT DUP >R ! 
-        R> CELL+ SWAP
+: (ADJACENT-WORD!+) ( list,from,key -- list,from )
+    2DUP KEY-ADJACENT? IF         \ list,from,key
+        ROT DUP 2SWAP ROT !       \ list,from
+        SWAP CELL+ SWAP 
     ELSE
         DROP
     THEN ;
 
-: ADJACENT-WORD! ( ad,t,v,k -- ad )
-    SWAP 0= IF      \ ad,t,k
-        (ADJACENT-WORD!)
+: ADJACENT-WORD!+ ( list,from,value,key -- limit,from )
+    SWAP 0= IF     
+        (ADJACENT-WORD!+)
     ELSE
         DROP
     THEN ;
     
-: VISIT-ADJACENTS-WORDS ( limit,start,dict -- )
-    -ROT ?DO 
-        DUP  I @ ROT VISIT-WORD 
-    CELL +LOOP DROP ;
+: ADJACENT-WORDS! ( list,key,dict -- limit,key )
+    ['] ADJACENT-WORD!+ SWAP ACT-EXECUTE ;
+
+: VISIT-ADJACENTS-WORDS ( dict,key,limit,list -- )
+    ?DO 
+        2DUP I @ ROT ACT-INSERT
+    CELL +LOOP 2DROP ;
     
-: FIND-ADJACENT-WORDS ( k,dict,ad -- n )
-    OVER >R
-    DUP 2SWAP ['] ADJACENT-WORD! SWAP ACT-EXECUTE
-    DROP SWAP
-    2DUP R> VISIT-ADJACENTS-WORDS
-    - CELL / ;
+: FIND-ADJACENT-WORDS ( k,dict,list -- n )
+    ROT >R 2DUP       \ dict,list,dict,list
+    R> ROT            \ dict,list,list,key,dict
+    ADJACENT-WORDS!   \ dict,list,limit,key
+    SWAP ROT          \ dict,key,limit,list
+    2DUP 2>R
+    VISIT-ADJACENTS-WORDS
+    2R> - CELL / ;
 
 : (.LADDER) ( path,k -- )
-    DUP IF
+    BEGIN
+        ?DUP WHILE
         DUP PAD KEY>S TYPE SPACE
         OVER FIND-WORD DROP
-        RECURSE
-    ELSE
-        2DROP
-    THEN ;
+    REPEAT DROP ;
 
 : .LADDER ( k,path -- )
     SWAP (.LADDER) ;

@@ -51,7 +51,7 @@ s" small.txt" dict READ-WORDS
 
 T{ .( after visiting the word, the word is visited. ) CR
     KEY" eel" dict FIND-WORD ?TRUE ?FALSE
-    KEY" eel" dict VISIT-WORD
+    KEY" pel" KEY" eel" dict VISIT-WORD
     KEY" eel" dict FIND-WORD ?TRUE ?TRUE
 }T
 
