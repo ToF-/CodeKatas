@@ -16,12 +16,24 @@ T{ .( after setting predecessor in the word graph the predecessor can be found. 
     S" FOO" wg pad WG-PRED@ S" BAR" ?STR
 }T
 
-\   T{ .( path execute in the word graph follow the word predecessors. ) CR
-\       S" QUX" S" BAR" wg WG-PRED!
-\       S" LOO" S" QUX" wg WG-PRED!
-\       S" FOO" ' DROP wg WG-PATH-EXECUTE
-\       PAD KEY>S S" LOO" ?STR
-\       PAD KEY>S S" QUX" ?STR
-\       PAD KEY>S S" BAR" ?STR
-\       .s 
-\   }T
+wg D-CLEAR-VALUES
+S" BAT" wg WG-ADD-WORD
+S" CAB" wg WG-ADD-WORD
+S" CAT" wg WG-ADD-WORD
+S" COT" wg WG-ADD-WORD
+S" DAB" wg WG-ADD-WORD
+S" DOG" wg WG-ADD-WORD
+S" EEL" wg WG-ADD-WORD
+S" FOG" wg WG-ADD-WORD
+S" FOX" wg WG-ADD-WORD
+S" FLY" wg WG-ADD-WORD
+
+QUEUE q
+T{ .( after searching adjacent words the words have a predecessor. ) CR
+    KEY" CAT" q Q-APPEND 
+    q wg WG-ADJACENTS
+    q Q-EMPTY? ?FALSE
+    q Q-POP KEY" CAB" ?S
+    q Q-POP KEY" BAT" ?S
+    q Q-POP KEY" COT" ?S
+}T

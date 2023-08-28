@@ -1,4 +1,5 @@
 \ word-graph.fs
+REQUIRE adjacent.fs
 REQUIRE dict.fs
 REQUIRE wordkey.fs
 
@@ -14,8 +15,42 @@ REQUIRE wordkey.fs
     ROT D-VALUE
     SWAP KEY>S ;
 
+: WG-KEY-PRED! ( kp,k,wg -- )
+    D-UPDATE ;
+
 : WG-PRED! ( adp,lp,ad,l,wg -- )
-    >R S>KEY -ROT S>KEY SWAP R> D-UPDATE ;
+    >R S>KEY        \ adp,lp,k
+    -ROT S>KEY      \ k,fk
+    SWAP R>         \ fk,k,wg
+    WG-KEY-PRED! ;
+
+CREATE K-BUFFER-A CELL ALLOT
+CREATE K-BUFFER-B CELL ALLOT
+
+: KEY-ADJACENT? ( t,k -- f )
+    K-BUFFER-A KEY>S
+    ROT K-BUFFER-B KEY>S 
+    ADJACENT? ;
+    
+: (WG-ADD-ADJACENT) ( q,wg,t,k -- q,wg,t )
+    2OVER 2OVER       \ q,wg,t,k,q,wg,t,k
+    ROT WG-KEY-PRED!  \ q,wg,t,k,q
+    Q-APPEND ;        \ q,wg
+
+: WG-ADD-ADJACENT ( q,wg,t,v,k -- q,wg,t )
+    SWAP 0= >R 
+    2DUP KEY-ADJACENT? 
+    R> AND IF
+        (WG-ADD-ADJACENT)
+    ELSE
+        DROP
+    THEN ;
+
+: WG-ADJACENTS ( q,wg -- )
+    2DUP                     \ q,wg,q,wg
+    SWAP Q-POP               \ q,wg,wg,t
+    SWAP ['] WG-ADD-ADJACENT \ q,wg,t,wg,xt
+    SWAP ACT-EXECUTE DROP 2DROP ;
 
 
 
