@@ -2,6 +2,7 @@
 REQUIRE adjacent.fs
 REQUIRE dict.fs
 REQUIRE wordkey.fs
+REQUIRE queue.fs
 
 : WORD-GRAPH ( <name> -- )
     DICT ;
@@ -62,6 +63,7 @@ CREATE K-BUFFER-B CELL ALLOT
     -1 -ROT WG-KEY-PRED! ;
 
 : WG-SEARCH-PATH ( s,t,q,wg -- )
+    DUP D-CLEAR-VALUES
     2OVER 2OVER ROT DROP
     WG-INIT-SEARCH-PATH
     2SWAP >R DROP
@@ -77,3 +79,31 @@ CREATE K-BUFFER-B CELL ALLOT
     R> DROP 2DROP ;
 
 
+256 CONSTANT LINE-MAX
+CREATE LINE-BUFFER LINE-MAX ALLOT
+
+: WG-READ-WORDS ( ad,l,wg -- )
+    >R R/O OPEN-FILE THROW
+    BEGIN
+        DUP LINE-BUFFER LINE-MAX ROT READ-LINE THROW
+    WHILE
+        LINE-BUFFER SWAP R@ WG-ADD-WORD
+    REPEAT DROP
+    CLOSE-FILE THROW 
+    R> DROP ;
+
+: .WG-PATH ( k,wg -- )
+    BEGIN
+        OVER -1 <> WHILE
+        OVER PAD KEY>S TYPE SPACE
+        TUCK WG-KEY-PRED@
+        SWAP
+    REPEAT
+    2DROP ;
+
+: WG-CHECK-WORD ( ad,l,wg -- )
+    -ROT S>KEY SWAP ACT-HAS? 0= IF
+        S" not in the word list" 
+        EXCEPTION THROW
+    THEN ;
+    

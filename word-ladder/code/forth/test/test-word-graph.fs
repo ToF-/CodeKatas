@@ -5,13 +5,13 @@ REQUIRE ../src/word-graph.fs
 CR
 .( word graph ) CR
 
-T{ .( after adding a word in the word graph its predecessor is the empty word. ) CR
+T{ .(   after adding a word in the word graph its predecessor is the empty word. ) CR
     WORD-GRAPH wg
     S" FOO" wg WG-ADD-WORD
     S" FOO" wg pad WG-PRED@ 0 ?S DROP
 }T
 
-T{ .( after setting predecessor in the word graph the predecessor can be found. ) CR
+T{ .(   after setting predecessor in the word graph the predecessor can be found. ) CR
     S" BAR" S" FOO" wg WG-PRED!
     S" FOO" wg pad WG-PRED@ S" BAR" ?STR
 }T
@@ -23,7 +23,7 @@ s" BAT" s" CAB" s" CAT" s" COT" s" DAB" s" DOG" s" COG" s" FOG" s" FOX" s" FLY"
 10 wg,,
 
 QUEUE q
-T{ .( after searching adjacent words the words have a predecessor. ) CR
+T{ .(   after searching adjacent words the words have a predecessor. ) CR
     KEY" CAT" q Q-APPEND 
     q wg WG-ADJACENTS
     q Q-EMPTY? ?FALSE
@@ -40,7 +40,7 @@ wg D-CLEAR-VALUES
 s" BAT" s" CAB" s" CAT" s" COT" s" DAB" s" DOG" s" COG" s" FOG" s" FOX" s" FLY" 
 10 wg,,
 
-T{ .( after searching for a ladder the path is in the word graph. ) CR
+T{ .(   after searching for a ladder the path is in the word graph. ) CR
     wg D-CLEAR-VALUES
     KEY" DOG" KEY" CAT" q wg WG-SEARCH-PATH
     KEY" CAT" 
@@ -48,4 +48,16 @@ T{ .( after searching for a ladder the path is in the word graph. ) CR
     wg WG-KEY-PRED@ dup pad key>s s" COG" ?STR
     wg WG-KEY-PRED@ dup pad key>s s" DOG" ?STR
     DROP
+    .(   display of path: )
+    KEY" CAT" wg .WG-PATH CR
 }T
+
+T{ .(   after reading words from a file the graph has the words from the file. ) CR
+    wg D-CLEAR-VALUES
+    S" sample.txt" wg WG-READ-WORDS
+    KEY" bee" wg WG-KEY-PRED@ 0 ?S
+    KEY" cat" wg WG-KEY-PRED@ 0 ?S
+    KEY" dog" wg WG-KEY-PRED@ 0 ?S
+    KEY" wax" wg WG-KEY-PRED@ 0 ?S
+}T
+
