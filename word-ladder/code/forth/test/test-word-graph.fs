@@ -16,17 +16,11 @@ T{ .( after setting predecessor in the word graph the predecessor can be found. 
     S" FOO" wg pad WG-PRED@ S" BAR" ?STR
 }T
 
+: wg,, 0 do wg wg-add-word loop ;
 wg D-CLEAR-VALUES
-S" BAT" wg WG-ADD-WORD
-S" CAB" wg WG-ADD-WORD
-S" CAT" wg WG-ADD-WORD
-S" COT" wg WG-ADD-WORD
-S" DAB" wg WG-ADD-WORD
-S" DOG" wg WG-ADD-WORD
-S" EEL" wg WG-ADD-WORD
-S" FOG" wg WG-ADD-WORD
-S" FOX" wg WG-ADD-WORD
-S" FLY" wg WG-ADD-WORD
+
+s" BAT" s" CAB" s" CAT" s" COT" s" DAB" s" DOG" s" EEL" s" FOG" s" FOX" s" FLY" 
+10 wg,,
 
 QUEUE q
 T{ .( after searching adjacent words the words have a predecessor. ) CR
