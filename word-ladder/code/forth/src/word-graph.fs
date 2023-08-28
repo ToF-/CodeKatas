@@ -10,9 +10,12 @@ REQUIRE wordkey.fs
     -ROT S>KEY SWAP
     0 -ROT D-UPDATE ;
 
+: WG-KEY-PRED@ ( k,wg -- k )
+    D-VALUE ;
+
 : WG-PRED@ ( ad,l,wg,dest -- dest+1,l )
     2SWAP S>KEY
-    ROT D-VALUE
+    ROT WG-KEY-PRED@
     SWAP KEY>S ;
 
 : WG-KEY-PRED! ( kp,k,wg -- )
@@ -52,6 +55,38 @@ CREATE K-BUFFER-B CELL ALLOT
     SWAP ['] WG-ADD-ADJACENT \ q,wg,t,wg,xt
     SWAP ACT-EXECUTE DROP 2DROP ;
 
+: .KEY-STEP ( v,k -- )
+    OVER IF 
+        PAD KEY>S TYPE SPACE ." -> " 
+        DUP -1 = IF
+            DROP ." nil"
+        ELSE
+            PAD KEY>S TYPE 
+        THEN ." , " 
+    ELSE
+        2DROP
+    THEN ;
 
+: .KEY ( k -- )
+    PAD KEY>S ." looking for neighbors of " TYPE CR ;
+
+: WG-INIT-SEARCH-PATH ( s,wg -- )
+    -1 -ROT WG-KEY-PRED! ;
+
+: WG-SEARCH-PATH ( s,t,q,wg -- )
+    ROT >R ROT >R
+    R@ OVER WG-INIT-SEARCH-PATH
+    OVER R> SWAP Q-APPEND
+    BEGIN
+        ['] .KEY-STEP OVER ACT-EXECUTE CR
+        OVER Q-EMPTY? 0= WHILE
+        OVER Q-HEAD@
+        R@ = IF
+            OVER Q-EMPTY
+        ELSE
+            2DUP WG-ADJACENTS 
+        THEN
+    REPEAT
+    >R DROP 2DROP ;
 
 
