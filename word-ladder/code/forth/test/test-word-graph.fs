@@ -47,4 +47,5 @@ T{ .( after searching for a ladder the path is in the word graph. ) CR
     wg WG-KEY-PRED@ dup pad key>s s" COT" ?STR
     wg WG-KEY-PRED@ dup pad key>s s" COG" ?STR
     wg WG-KEY-PRED@ dup pad key>s s" DOG" ?STR
+    DROP
 }T
