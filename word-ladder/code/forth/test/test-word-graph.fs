@@ -9,6 +9,7 @@ T{ .(   after adding a word in the word graph its predecessor is the empty word.
     WORD-GRAPH wg
     S" FOO" wg WG-ADD-WORD
     S" FOO" wg pad WG-PRED@ 0 ?S DROP
+    S" FOO" wg WG-HAS-WORD? ?TRUE
 }T
 
 T{ .(   after setting predecessor in the word graph the predecessor can be found. ) CR
@@ -41,8 +42,7 @@ s" BAT" s" CAB" s" CAT" s" COT" s" DAB" s" DOG" s" COG" s" FOG" s" FOX" s" FLY"
 10 wg,,
 
 T{ .(   after searching for a ladder the path is in the word graph. ) CR
-    wg D-CLEAR-VALUES
-    KEY" DOG" KEY" CAT" q wg WG-SEARCH-PATH
+    KEY" DOG" KEY" CAT" q wg WG-SEARCH-PATH ?TRUE
     KEY" CAT" 
     wg WG-KEY-PRED@ dup pad key>s s" COT" ?STR
     wg WG-KEY-PRED@ dup pad key>s s" COG" ?STR
@@ -50,6 +50,10 @@ T{ .(   after searching for a ladder the path is in the word graph. ) CR
     DROP
     .(   display of path: )
     KEY" CAT" wg .WG-PATH CR
+}T
+
+T{ .(   searching for an inexistant ladder returns false. ) CR
+    KEY" FLY" KEY" CAT" q wg WG-SEARCH-PATH ?FALSE
 }T
 
 T{ .(   after reading words from a file the graph has the words from the file. ) CR

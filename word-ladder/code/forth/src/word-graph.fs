@@ -69,14 +69,14 @@ CREATE K-BUFFER-B CELL ALLOT
     2SWAP >R DROP
     BEGIN
         OVER Q-EMPTY? 0= WHILE
-        OVER Q-HEAD@
-        R@ = IF
+        OVER Q-HEAD@ R@ = IF
             OVER Q-EMPTY
+            R> DROP 0 >R
         ELSE
             2DUP WG-ADJACENTS 
         THEN
     REPEAT
-    R> DROP 2DROP ;
+    2DROP R> 0= ;
 
 
 256 CONSTANT LINE-MAX
@@ -101,9 +101,12 @@ CREATE LINE-BUFFER LINE-MAX ALLOT
     REPEAT
     2DROP ;
 
+: WG-HAS-WORD? ( ad,l,wg -- f )
+    -ROT S>KEY SWAP ACT-HAS? ;
+     
 : WG-CHECK-WORD ( ad,l,wg -- )
-    -ROT S>KEY SWAP ACT-HAS? 0= IF
-        S" not in the word list" 
+    WG-HAS-WORD? 0= IF
+        S" not in the word list" CR
         EXCEPTION THROW
     THEN ;
     
