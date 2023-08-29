@@ -3,9 +3,7 @@ REQUIRE ffl/tst.fs
 PAGE
 REQUIRE wl-word-test.fs
 REQUIRE wl-queue-test.fs
-
-\ REQUIRE test-queue.fs
-\ REQUIRE test-dict.fs
+REQUIRE wl-dict-test.fs
 \ REQUIRE test-word-graph.fs
 \ REQUIRE test-groups.fs
 BYE
