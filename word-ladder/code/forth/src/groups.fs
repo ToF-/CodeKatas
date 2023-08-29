@@ -68,8 +68,5 @@ CREATE GD-LETTER 1 ALLOT
         D-UPDATE R>            \ gd
     LOOP DROP ;
 
-: GD-GROUP>LETTERS ( ad,l,dest,gd -- )
-    2SWAP S>KEY 
-    SWAP D-VALUE-OR-NIL
-    SWAP LS>S ;
-
+: GROUP-NTH-WORD>S ( ad,l,0,ls,dest -- )
+; 

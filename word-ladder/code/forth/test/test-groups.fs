@@ -51,3 +51,15 @@ T{ .(   a group dictionary holds groups and their letter sets. ) CR
     s" hors~" pad gd GD-GROUP>LETTERS PAD COUNT s" e" ?STR
 }T
 
+CHAR h LS-EMPTY LS-ADD-LETTER 
+CHAR m SWAP LS-ADD-LETTER SWAP 
+CHAR w LS-ADD-LETTER CONSTANT hmw
+CHAR r LS-EMPTY LS-ADD-LETTER
+char u SWAP LS-ADD-LETTER CONSTANT ru
+
+T{ .(   given a group and it's letter set, return any given word of the group" $ do
+    s" ~orse" hmw 0 0 PAD GROUP-NTH-WORD>S PAD COUNT s" horse" ?STR
+    s" ~orse" hmw 0 2 PAD GROUP-NTH-WORD>S PAD COUNT s" worse" ?STR
+    s" ho~se" ru  2 1 PAD GROUP-NTH-WORD>S PAD COUNT s" house" ?STR
+}T
+
