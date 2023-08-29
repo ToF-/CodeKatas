@@ -51,7 +51,9 @@ CREATE WL-WORD-BUFFER CELL ALLOT
 
 : (WL-ADJACENT?) ( w1,w2 -- f )
     0 -ROT 
-    DUP WL-WORD-LENGTH 0 ?DO   \ acc,w1,w2
+    NEXT>>C DROP
+    SWAP NEXT>>C
+    0 ?DO                      \ acc,w1,w2
         NEXT>>C                \ acc,w1,w2',c2
         ROT NEXT>>C            \ acc,w2',c2,w1',c1
         ROT <> IF              \ acc,w2',w1'
@@ -68,3 +70,8 @@ CREATE WL-WORD-BUFFER CELL ALLOT
         2DROP FALSE
     THEN ;
     
+: WW WL-WORD ;
+
+: .WL-WORD ( w -- )
+    WL-WORD-BUFFER !
+    WL-WORD-BUFFER COUNT TYPE ;

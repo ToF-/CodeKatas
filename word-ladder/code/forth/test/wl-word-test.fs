@@ -5,7 +5,6 @@ REQUIRE ../src/wl-word.fs
 
 CR .( wl-word ) CR
 
-: WW WL-WORD ;
 .(   a wl word should be no longer than 7 and include only letters chars from a to z. ) CR
 T{
     s" abracadabra" WL-CHECK-WORD ?FALSE
@@ -28,5 +27,6 @@ T{
     WW dog WW horse WL-ADJACENT? ?FALSE
     WW dog WW fog   WL-ADJACENT? ?TRUE
     WW dog WW bag   WL-ADJACENT? ?FALSE
+    WW dab WW cat   WL-ADJACENT? ?FALSE
 }T
 
