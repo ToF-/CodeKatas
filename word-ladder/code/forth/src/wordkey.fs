@@ -14,10 +14,8 @@ CREATE EXTRA-S>KEY-BUFFER CELL ALLOT
         S" S>KEY : string too large" EXCEPTION THROW 
     THEN ;
 
-: KEY>S ( u,ad -- ad+1,l )
-    DUP CELL ERASE
-    TUCK !
-    COUNT ;
+: KEY>S ( u,ad -- )
+    ! ;
 
 : KEY"
     [CHAR] " WORD COUNT S>KEY ;

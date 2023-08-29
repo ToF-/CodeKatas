@@ -8,13 +8,13 @@ CR
 T{ .(   after adding a word in the word graph its predecessor is the empty word. ) CR
     WORD-GRAPH wg
     S" FOO" wg WG-ADD-WORD
-    S" FOO" wg pad WG-PRED@ 0 ?S DROP
+    S" FOO" wg pad WG-PRED@>S PAD COUNT S" " ?STR
     S" FOO" wg WG-HAS-WORD? ?TRUE
 }T
 
 T{ .(   after setting predecessor in the word graph the predecessor can be found. ) CR
     S" BAR" S" FOO" wg WG-PRED!
-    S" FOO" wg pad WG-PRED@ S" BAR" ?STR
+    S" FOO" wg pad WG-PRED@>S PAD COUNT S" BAR" ?STR
 }T
 
 : wg,, 0 do wg wg-add-word loop ;
@@ -44,9 +44,9 @@ s" BAT" s" CAB" s" CAT" s" COT" s" DAB" s" DOG" s" COG" s" FOG" s" FOX" s" FLY"
 T{ .(   after searching for a ladder the path is in the word graph. ) CR
     KEY" DOG" KEY" CAT" q wg WG-SEARCH-PATH ?TRUE
     KEY" CAT" 
-    wg WG-KEY-PRED@ dup pad key>s s" COT" ?STR
-    wg WG-KEY-PRED@ dup pad key>s s" COG" ?STR
-    wg WG-KEY-PRED@ dup pad key>s s" DOG" ?STR
+    wg WG-KEY-PRED@ dup pad key>s PAD COUNT s" COT" ?STR
+    wg WG-KEY-PRED@ dup pad key>s PAD COUNT s" COG" ?STR
+    wg WG-KEY-PRED@ dup pad key>s PAD COUNT s" DOG" ?STR
     DROP
     .(   display of path: )
     KEY" CAT" wg .WG-PATH CR

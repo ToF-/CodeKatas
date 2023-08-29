@@ -14,7 +14,7 @@ REQUIRE queue.fs
 : WG-KEY-PRED@ ( k,wg -- k )
     D-VALUE ;
 
-: WG-PRED@ ( ad,l,wg,dest -- dest+1,l )
+: WG-PRED@>S ( ad,l,wg,dest -- )
     2SWAP S>KEY
     ROT WG-KEY-PRED@
     SWAP KEY>S ;
@@ -33,7 +33,9 @@ CREATE K-BUFFER-B CELL ALLOT
 
 : KEY-ADJACENT? ( t,k -- f )
     K-BUFFER-A KEY>S
-    ROT K-BUFFER-B KEY>S 
+    K-BUFFER-B KEY>S 
+    K-BUFFER-A COUNT
+    K-BUFFER-B COUNT
     ADJACENT? ;
     
 : (WG-ADD-ADJACENT) ( q,wg,t,k -- q,wg,t )
@@ -95,7 +97,8 @@ CREATE LINE-BUFFER LINE-MAX ALLOT
 : .WG-PATH ( k,wg -- )
     BEGIN
         OVER -1 <> WHILE
-        OVER PAD KEY>S TYPE SPACE
+        OVER PAD KEY>S
+        PAD COUNT TYPE SPACE
         TUCK WG-KEY-PRED@
         SWAP
     REPEAT

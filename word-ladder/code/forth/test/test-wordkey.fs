@@ -15,6 +15,6 @@ T{ .(   a string as key can be given from input flow.) CR
     KEY" dog" s" dog" S>KEY ?S
 }T
 T{ .(   a S>KEY cell can be converted back into a string on the pad. ) CR
-    KEY" slope" pad KEY>S s" slope" ?STR
+    KEY" slope" pad KEY>S PAD COUNT s" slope" ?STR
 }T
 
