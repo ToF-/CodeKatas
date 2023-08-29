@@ -1,4 +1,5 @@
 \ groups.fs
+REQUIRE ffl/act.fs
 
 : S-COPY ( a,l,dest -- )
     2DUP C!
@@ -34,8 +35,33 @@
     DROP OVER - 
     OVER C! COUNT ;
 
-: S>GROUP-LETTER ( ad,l,i,dest -- ad,l,c )
+: S>GROUP-LETTER ( ad,l,i,dest -- dest+1,l,c )
     OVER >R
     2SWAP OVER >R 2SWAP
     S>NTH-GROUP
     2R> SWAP + C@ ;
+
+: GROUP-DICTIONARY ( <name> -- )
+    ACT-CREATE ;
+
+CREATE GD-BUFFER CELL 1+ ALLOT
+CREATE GD-LETTER 1 ALLOT
+2VARIABLE GD-SOURCE 
+
+: GD-ADD-WORD ( ad,l,gd -- )
+    OVER 0 8 WITHIN 0= IF s" word too large" EXCEPTION THROW THEN
+    -ROT                       \ gd,ad,l
+    2DUP GD-SOURCE 2!          \ gd,ad,l
+    NIP 0 ?DO                  \ gd
+        GD-SOURCE 2@           \ gd,ad,l
+        I GD-BUFFER            \ gd,ad,l,i,dst
+        S>GROUP-LETTER         \ gd,dst+1,l,c
+        -ROT S>KEY             \ gd,c,k
+        ROT 2DUP               \ c,k,gd,k,gd
+        ACT-GET                \ c,k,gd,v/f
+        0= IF 0 THEN           \ c,k,gd,ls
+        -ROT 2SWAP             \ k,gd,c,ls
+        LS-ADD-LETTER          \ k,gd,ls'
+        ROT DUP >R             \ k,ls',gd
+        ACT-INSERT R>          \ gd
+    LOOP DROP ;

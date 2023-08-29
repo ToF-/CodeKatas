@@ -34,5 +34,16 @@ T{ .(   a letter set can be converted in the string of all its letters. ) CR
 
 T{ .(   a word can be splitted into its nth group and letter. ) CR
     s" group" 0 PAD S>GROUP-LETTER CHAR g ?S S" ~roup" ?STR
+    s" group" 4 PAD S>GROUP-LETTER CHAR p ?S S" grou~" ?STR
+}T
+
+T{ .(   a group dictionary holds groups and their letter sets. ) CR
+    GROUP-DICTIONARY gd
+    s" horse" gd hex dbg GD-ADD-WORD
+    s" ~orse" pad gd GD-GROUP-LETTERS s" h" ?STR
+    s" h~rse" pad gd GD-GROUP-LETTERS s" o" ?STR
+    s" ho~se" pad gd GD-GROUP-LETTERS s" r" ?STR
+    s" hor~e" pad gd GD-GROUP-LETTERS s" s" ?STR
+    s" hors~" pad gd GD-GROUP-LETTERS s" e" ?STR
 }T
 
