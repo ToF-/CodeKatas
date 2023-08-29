@@ -1,5 +1,4 @@
 \ tests.fs
-
 REQUIRE ffl/tst.fs
 PAGE
 REQUIRE wl-word-test.fs
