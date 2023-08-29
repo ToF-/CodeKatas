@@ -33,3 +33,9 @@
     LOOP 
     DROP OVER - 
     OVER C! COUNT ;
+
+: S>GROUP-LETTER ( ad,l,i,dest -- ad,l,c )
+    OVER >R
+    2SWAP OVER >R 2SWAP
+    S>NTH-GROUP
+    2R> SWAP + C@ ;
