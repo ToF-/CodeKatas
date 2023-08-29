@@ -4,6 +4,15 @@ REQUIRE ../src/groups.fs
 
 CR .( groups ) CR
 
+T{ .(   given a string of length < 8 and an index between 0 and 7 return the corresponding group. ) CR
+    s" horse" 0 PAD S>NTH-GROUP
+    PAD GROUP-COUNT S" ~orse" ?STR
+    PAD GROUP-INDEX 0 ?S
+    S" mouse" 4 PAD S>NTH-GROUP
+    PAD GROUP-COUNT S" mous~" ?STR
+    PAD GROUP-INDEX 4 ?S
+}T
+
 T{ .(   the nth group of a word is that word with ~ in place of the nth char. ) CR
     S" horse" 0 PAD S>NTH-GROUP PAD COUNT S" ~orse" ?STR
     S" horse" 4 PAD S>NTH-GROUP PAD COUNT S" hors~" ?STR
@@ -33,8 +42,8 @@ T{ .(   a letter set can be converted in the string of all its letters. ) CR
 }T
 
 T{ .(   a word can be splitted into its nth group and letter. ) CR
-    s" group" 0 PAD S>GROUP-LETTER CHAR g ?S PAD COUNT S" ~roup" ?STR
-    s" group" 4 PAD S>GROUP-LETTER CHAR p ?S PAD COUNT S" grou~" ?STR
+    s" group" 0 PAD S>GROUP-LETTER CHAR g ?S PAD GROUP-COUNT S" ~roup" ?STR
+    s" group" 4 PAD S>GROUP-LETTER CHAR p ?S PAD GROUP-COUNT S" grou~" ?STR
 }T
 
 T{ .(   a group dictionary holds groups and their letter sets. ) CR
@@ -50,6 +59,7 @@ T{ .(   a group dictionary holds groups and their letter sets. ) CR
     s" hor~e" pad gd GD-GROUP>LETTERS PAD COUNT s" s" ?STR
     s" hors~" pad gd GD-GROUP>LETTERS PAD COUNT s" e" ?STR
 }T
+BYE
 
 CHAR h LS-EMPTY LS-ADD-LETTER 
 CHAR m SWAP LS-ADD-LETTER SWAP 

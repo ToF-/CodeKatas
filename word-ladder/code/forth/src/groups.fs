@@ -10,11 +10,32 @@ REQUIRE ./dict.fs
 : NTH-C! ( c,i,dest -- )
     + C! ;
 
+: CHECK-WORD-LENTGH ( n -- )
+    0 8 WITHIN 0= IF 
+        s" word too large" 
+        EXCEPTION THROW
+    THEN ;
+
+: CHECK-GROUP-INDEX ( n,i -- )
+    0 ROT WITHIN 0= IF 
+        s" index too large" 
+        EXCEPTION THROW 
+    THEN ;
+
+
+: GROUP-COUNT ( ad -- ad+1,count )
+    COUNT 15 AND ;
+
+: GROUP-INDEX ( ad -- n )
+    COUNT 4 RSHIFT NIP ;
+
 : S>NTH-GROUP ( ad,l,i,dest -- )
-    DUP >R 2SWAP ROT      \ i,ad,l,dest
-    S-COPY                \ i
-    R> [CHAR] ~ -ROT      \ c,i,dest
-    1+ NTH-C! ;
+    >R
+    OVER CHECK-WORD-LENTGH
+    2DUP CHECK-GROUP-INDEX
+    2DUP 4 LSHIFT OR R@ C!
+    -ROT R@ 1+ SWAP CMOVE
+    1+ [CHAR] ~ SWAP R> NTH-C! ;
 
 0 CONSTANT LS-EMPTY
 
@@ -52,14 +73,14 @@ CREATE GD-LETTER 1 ALLOT
 2VARIABLE GD-SOURCE 
 
 : GD-ADD-WORD ( ad,l,gd -- )
-    OVER 0 8 WITHIN 0= IF s" word too large" EXCEPTION THROW THEN
+    OVER CHECK-WORD-LENTGH
     -ROT                       \ gd,ad,l
     2DUP GD-SOURCE 2!          \ gd,ad,l
     NIP 0 ?DO                  \ gd
         GD-SOURCE 2@           \ gd,ad,l
         I GD-BUFFER            \ gd,ad,l,i,dst
         S>GROUP-LETTER         \ gd,c
-        GD-BUFFER COUNT S>KEY  \ gd,c,k
+        GD-BUFFER GROUP-COUNT S>KEY  \ gd,c,k
         ROT 2DUP               \ c,k,gd,k,gd
         D-VALUE-OR-NIL         \ c,k,gd,ls
         -ROT                   \ c,ls,k,gd
@@ -68,5 +89,3 @@ CREATE GD-LETTER 1 ALLOT
         D-UPDATE R>            \ gd
     LOOP DROP ;
 
-: GROUP-NTH-WORD>S ( ad,l,0,ls,dest -- )
-; 
