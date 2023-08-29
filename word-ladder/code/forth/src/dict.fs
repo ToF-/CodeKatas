@@ -13,6 +13,9 @@ REQUIRE ffl/act.fs
         EXCEPTION THROW
     THEN ;
 
+: D-VALUE-OR-NIL ( k,d -- v )
+    ACT-GET 0= IF 0 THEN ;
+
 : (CLEAR-VALUE) ( d,v,k -- d )
     NIP OVER 0 -ROT D-UPDATE ;
 

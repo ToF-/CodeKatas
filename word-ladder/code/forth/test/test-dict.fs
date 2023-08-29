@@ -14,6 +14,10 @@ T{ .(   after updating a key and value, the value can be found in the dict. ) CR
     ' check-non-existing-key catch [if] TRUE [then] ?TRUE
 }T
 
+T{ .(   getting a value with zero if the key doesn't exist. ) CR
+    123456 d D-VALUE-OR-NIL 0 ?S
+}T
+
 T{ .(   after clearing all values, the values in the dict are all zero. ) CR
     23 1 d D-UPDATE
     17 2 d D-UPDATE

@@ -1,5 +1,7 @@
 \ groups.fs
 REQUIRE ffl/act.fs
+REQUIRE ./wordkey.fs
+REQUIRE ./dict.fs
 
 : S-COPY ( a,l,dest -- )
     2DUP C!
@@ -8,12 +10,11 @@ REQUIRE ffl/act.fs
 : NTH-C! ( c,i,dest -- )
     + C! ;
 
-: S>NTH-GROUP ( ad,l,i,dest -- dest+1,l )
+: S>NTH-GROUP ( ad,l,i,dest -- )
     DUP >R 2SWAP ROT      \ i,ad,l,dest
     S-COPY                \ i
-    R@ [CHAR] ~ -ROT      \ c,i,dest
-    1+ NTH-C!
-    R> COUNT ;
+    R> [CHAR] ~ -ROT      \ c,i,dest
+    1+ NTH-C! ;
 
 0 CONSTANT LS-EMPTY
 
@@ -23,7 +24,7 @@ REQUIRE ffl/act.fs
 : LS-ADD-LETTER ( c,ls  -- ls' )
     SWAP [CHAR] ` - NTH-BIT OR ;
 
-: LS>S ( ls,pad -- ad,l )
+: LS>S ( ls,pad -- )
     DUP ROT
     27 1 DO
         I NTH-BIT OVER AND IF
@@ -33,16 +34,18 @@ REQUIRE ffl/act.fs
         THEN
     LOOP 
     DROP OVER - 
-    OVER C! COUNT ;
+    OVER C! DROP ;
 
-: S>GROUP-LETTER ( ad,l,i,dest -- dest+1,l,c )
-    OVER >R
-    2SWAP OVER >R 2SWAP
-    S>NTH-GROUP
-    2R> SWAP + C@ ;
+: S>GROUP-LETTER ( ad,l,i,dest -- c )
+    2OVER 2OVER S>NTH-GROUP
+    DROP NIP + C@ ;
 
 : GROUP-DICTIONARY ( <name> -- )
-    ACT-CREATE ;
+    DICT ;
+
+: GD-LETTER-SET ( ad,l,gd -- ls )
+    -ROT S>KEY SWAP
+    D-VALUE-OR-NIL ;
 
 CREATE GD-BUFFER CELL 1+ ALLOT
 CREATE GD-LETTER 1 ALLOT
@@ -55,13 +58,18 @@ CREATE GD-LETTER 1 ALLOT
     NIP 0 ?DO                  \ gd
         GD-SOURCE 2@           \ gd,ad,l
         I GD-BUFFER            \ gd,ad,l,i,dst
-        S>GROUP-LETTER         \ gd,dst+1,l,c
-        -ROT S>KEY             \ gd,c,k
+        S>GROUP-LETTER         \ gd,c
+        GD-BUFFER COUNT S>KEY  \ gd,c,k
         ROT 2DUP               \ c,k,gd,k,gd
-        ACT-GET                \ c,k,gd,v/f
-        0= IF 0 THEN           \ c,k,gd,ls
-        -ROT 2SWAP             \ k,gd,c,ls
-        LS-ADD-LETTER          \ k,gd,ls'
-        ROT DUP >R             \ k,ls',gd
-        ACT-INSERT R>          \ gd
+        D-VALUE-OR-NIL         \ c,k,gd,ls
+        -ROT                   \ c,ls,k,gd
+        2SWAP LS-ADD-LETTER    \ k,gd,ls'
+        -ROT DUP >R            \ ls',k,gd
+        D-UPDATE R>            \ gd
     LOOP DROP ;
+
+: GD-GROUP>LETTERS ( ad,l,dest,gd -- )
+    2SWAP S>KEY 
+    SWAP D-VALUE-OR-NIL
+    SWAP LS>S ;
+
