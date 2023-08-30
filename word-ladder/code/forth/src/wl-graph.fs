@@ -23,12 +23,23 @@ REQUIRE queue.fs
 : WLG-HAS-WORD? ( w,g -- f )
     ACT-HAS? ;
 
+: .WLG-ITEM ( v,k -- )
+    .WL-WORD
+    DUP WLG-START = IF
+        ." ->*" DROP
+    ELSE ?DUP IF
+        ." ->" .WL-WORD
+    THEN THEN 9 EMIT ;
+
 : (WLG-ADD-ADJACENT) ( w,g,k -- )
     ROT 2DUP WL-ADJACENT? IF
         SWAP ROT WLG-PRED!
     ELSE
         2DROP DROP
     THEN ;
+
+: .WLG ( g -- )
+    ['] .WLG-ITEM SWAP ACT-EXECUTE ; 
 
 : WLG-ADD-ADJACENT ( w,g,v,k -- w,g )
     2OVER 2SWAP                \ w,g,w,g,v,k
@@ -84,8 +95,4 @@ REQUIRE queue.fs
         THEN
     REPEAT
     2DROP R> 0= ;
-
-
-
-
 

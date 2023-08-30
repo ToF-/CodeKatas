@@ -9,6 +9,7 @@ T{
     WL-WORD horse
     DUP wg WLG-ADD-WORD
     wg WLG-PRED@ 0 ?S
+    WL-WORD horse wg WLG-HAS-WORD? ?TRUE
 }T
 .(   a word can be set as predecessor of a word in the graph. ) CR
 T{
@@ -40,7 +41,9 @@ T{
     ad Q-POP WW bat ?S
     ad Q-POP WW cot ?S
 }T
-.(   after a path search the words forming the path all have a predecessor.  ) CR
+.(   after a path search the words forming the path all have a predecessor ) CR
+.(   the path can be traversed with an executable routine ) CR 
 T{
     WW cat WW dog ad wg WLG-SEARCH-PATH ?TRUE
+    ' .WLG-ITEM wg ACT-EXECUTE
 }T
