@@ -42,8 +42,9 @@ T{
     ad Q-POP WW cot ?S
 }T
 .(   after a path search the words forming the path all have a predecessor ) CR
-.(   the path can be traversed with an executable routine ) CR 
+.(   the path can be traversed. ) CR 
 T{
     WW cat WW dog ad wg WLG-SEARCH-PATH ?TRUE
     ' .WLG-ITEM wg ACT-EXECUTE
+    CR WW dog wg .WLG-PATH
 }T

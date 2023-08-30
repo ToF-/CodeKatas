@@ -20,3 +20,16 @@ CREATE LINE-BUFFER MAX-LINE ALLOT
     CLOSE-FILE THROW
     DROP ;
 
+: CHECK-WORD ( ad,l,g -- )
+    -ROT S>WL-WORD DUP ROT
+    WLG-HAS-WORD? 0= IF
+        .WL-WORD s"  not in the list"
+        EXCEPTION THROW
+    ELSE
+        DROP
+    THEN ;
+
+: CHECK-ARGS ( ad,l,ad,l,g -- f )
+    >R R@ CHECK-WORD
+    R> CHECK-WORD ;
+

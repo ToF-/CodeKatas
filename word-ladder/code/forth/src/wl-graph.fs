@@ -86,7 +86,8 @@ REQUIRE queue.fs
     Q-APPEND                   \ g,q
     SWAP                       \ q,g
     BEGIN                      \ q,g
-        OVER Q-EMPTY? 0= WHILE
+        OVER Q-EMPTY? 0= 
+    WHILE
         OVER Q-HEAD@ R@ = IF
             OVER Q-EMPTY
             R> DROP 0 >R
@@ -96,3 +97,19 @@ REQUIRE queue.fs
     REPEAT
     2DROP R> 0= ;
 
+: (.WLG-PATH) ( w,g -- )
+    BEGIN
+        OVER WLG-START <> 
+    WHILE
+        OVER .WL-WORD SPACE
+        TUCK WLG-PRED@
+        SWAP
+    REPEAT
+    2DROP ;
+
+: .WLG-PATH ( w,g -- )
+    2DUP WLG-HAS-WORD? IF
+        (.WLG-PATH)
+    ELSE
+        2DROP
+    THEN ;

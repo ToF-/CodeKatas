@@ -1534,7 +1534,6 @@ hewed
 hewer
 hider
 hides
-hi-fi
 highs
 hiked
 hiker
@@ -1693,7 +1692,6 @@ joyed
 judge
 juice
 juicy
-ju-ju
 julep
 jumbo
 jumps
@@ -2140,7 +2138,6 @@ nobly
 nodal
 noddy
 nodes
-no-go
 nohow
 noise
 noisy
@@ -3368,7 +3365,6 @@ toady
 toast
 today
 toddy
-to-do
 togas
 toils
 token
@@ -3752,7 +3748,6 @@ wrung
 wryly
 xenon
 xerox
-x-ray
 yacht
 yards
 yarns
@@ -3772,7 +3767,6 @@ yolks
 young
 yours
 youth
-yo-yo
 yucca
 zebra
 zeros
