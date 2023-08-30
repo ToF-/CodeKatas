@@ -19,6 +19,9 @@ REQUIRE wl-dict.fs
 : WLG-START! ( w,g -- )
     WLG-START -ROT WLG-PRED! ;
 
+: WLG-HAS-WORD? ( w,g -- f )
+    ACT-HAS? ;
+
 : (WLG-ADD-ADJACENT) ( w,g,k -- )
     ROT 2DUP WL-ADJACENT? IF
         SWAP ROT WLG-PRED!

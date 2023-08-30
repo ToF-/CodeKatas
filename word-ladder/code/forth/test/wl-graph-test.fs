@@ -2,7 +2,7 @@
 REQUIRE ffl/tst.fs
 REQUIRE ../src/wl-graph.fs
 
-CR .( graph ) CR
+CR .( wl-graph ) CR
 .(   a word added to the graph has no predecessor at first. ) CR
 T{
     WL-GRAPH wg
@@ -44,4 +44,3 @@ T{
 T{
     WW cat WW dog ad wg WLG-SEARCH-PATH ?TRUE
 }T
-BYE

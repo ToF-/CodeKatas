@@ -2,7 +2,7 @@
 REQUIRE ffl/tst.fs
 REQUIRE ../src/wl-dict.fs
 
-CR .( dict ) CR
+CR .( wl-dict ) CR
 
 .(   after updating a key and value, the value can be found in the dict. ) CR
 T{ 
