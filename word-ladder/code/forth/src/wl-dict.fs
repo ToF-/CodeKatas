@@ -1,5 +1,5 @@
 \ wl-dict.fs
-REQUIRE ffl/act.fs
+REQUIRE ffl/act.fs   \ see https://irdvo.nl/FFL/docs/act.html
 
 : WL-DICT ( <name> -- )
     ACT-CREATE ;

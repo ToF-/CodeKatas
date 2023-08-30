@@ -23,7 +23,7 @@ T{
 .(   the adjacents words of a word that don't have a predecessor yet can be searched in the graph ) CR
 .(   then these words are updated to have the word as predecessor. ) CR
 T{
-    wg WLD-CLEAR-VALUES
+    wg ACT-CLEAR
     WW bat WW cab WW cat WW cot WW dab WW dog WW cog WW fog WW fox WW fly 
     : add-words 0 ?do wg WLG-ADD-WORD loop ;
     10 add-words
@@ -44,3 +44,4 @@ T{
 T{
     WW cat WW dog ad wg WLG-SEARCH-PATH ?TRUE
 }T
+BYE

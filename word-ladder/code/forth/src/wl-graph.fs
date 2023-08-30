@@ -7,64 +7,70 @@ REQUIRE wl-dict.fs
 : WL-GRAPH ( <name> -- )
     WL-DICT ;
 
-: WLG-ADD-WORD ( w,wlg -- )
+: WLG-ADD-WORD ( w,g -- )
     0 -ROT WLD-UPDATE ;
 
-: WLG-PRED@ ( w,wlg -- w )
+: WLG-PRED@ ( w,g -- w )
     WLD-VALUE ;
 
-: WLG-PRED! ( p,w,wlg -- w )
+: WLG-PRED! ( p,w,g -- w )
     WLD-UPDATE ;
 
-: WLG-START! ( w,wlg -- )
+: WLG-START! ( w,g -- )
     WLG-START -ROT WLG-PRED! ;
 
-: (WLG-ADD-ADJACENT) ( w,wlg,v,k -- )
-    NIP             \ w,wlg,k
-    ROT TUCK OVER   \ wlg,w,k,w,k
-    WL-ADJACENT? IF \ wlg,w,k
-        ROT WLG-PRED!
+: (WLG-ADD-ADJACENT) ( w,g,k -- )
+    ROT 2DUP WL-ADJACENT? IF
+        SWAP ROT WLG-PRED!
     ELSE
         2DROP DROP
     THEN ;
 
-: WLG-ADD-ADJACENT ( w,wlg,v,k -- w,wlg )
-    2OVER 2SWAP
-    OVER 0= IF
+: WLG-ADD-ADJACENT ( w,g,v,k -- w,g )
+    2OVER 2SWAP                \ w,g,w,g,v,k
+    SWAP 0= IF                 \ w,g,w,g,k
         (WLG-ADD-ADJACENT)
     ELSE
-        2DROP
+        2DROP DROP
     THEN ;
 
-: WLG-SEARCH-ADJACENTS! ( w,wlg -- )
+: WLG-SEARCH-ADJACENTS! ( w,g -- )
     ['] WLG-ADD-ADJACENT
     OVER ACT-EXECUTE
     2DROP ;
 
 : (WLG-QUEUE-ADJACENT) ( v,k,w,q -- )
     SWAP -ROT 2SWAP    \ k,q,v,w
-    = IF DUP CAR-DUMP Q-APPEND ELSE 2DROP THEN ;
+    = IF Q-APPEND ELSE 2DROP THEN ;
 
 : WLG-QUEUE-ADJACENT ( w,q,v,k -- w,q )
     2OVER (WLG-QUEUE-ADJACENT) ;
 
-: WLG-QUEUE-ADJACENTS ( w,q,wlg -- )
+: WLG-QUEUE-ADJACENTS ( w,q,g -- )
+    ASSERT( 2DUP <> )
     ['] WLG-QUEUE-ADJACENT
-    SWAP ACT-EXECUTE
+    SWAP 
+    ACT-EXECUTE
     2DROP ;
 
-: (WLG-SEARCH-PATH) ( q,wlg -- )
-    OVER Q-POP SWAP             \ q,w,wlg
-    2DUP WLG-SEARCH-ADJACENTS!  \ q,w,wlg
-    SWAP -ROT                   \ w,q,wlg
+: (WLG-SEARCH-PATH) ( q,g -- )
+    OVER Q-POP SWAP             \ q,w,g
+    2DUP WLG-SEARCH-ADJACENTS!  \ q,w,g
+    SWAP -ROT                   \ w,q,g
     WLG-QUEUE-ADJACENTS ;
 
-: WLG-SEARCH-PATH ( s,t,q,wlg -- )
-    >R R@ WLD-CLEAR-VALUES     \ s,t,q
-    ROT DUP R@ WLG-START!      \ t,q,s
-    OVER Q-APPEND              \ t,q
-    R> ROT >R                  \ q,wlg
-    BEGIN                      \ q,wlg
+: .WL-WORD-QUEUE ( q -- )
+    DUP CAR-LENGTH@ 0 ?DO I OVER CAR-GET .WL-WORD SPACE LOOP DROP ;
+
+: WLG-SEARCH-PATH ( s,t,q,g -- )
+    ROT >R                     \ s,q,g
+    DUP WLD-CLEAR-VALUES       \ s,q,g
+    ROT SWAP 2DUP              \ q,s,g,s,g
+    WLG-START!                 \ q,s,g
+    -ROT OVER                  \ g,q,s,q
+    Q-APPEND                   \ g,q
+    SWAP                       \ q,g
+    BEGIN                      \ q,g
         OVER Q-EMPTY? 0= WHILE
         OVER Q-HEAD@ R@ = IF
             OVER Q-EMPTY
@@ -73,7 +79,7 @@ REQUIRE wl-dict.fs
             2DUP (WLG-SEARCH-PATH)
         THEN
     REPEAT
-    2DROP >R 0= ;
+    2DROP R> 0= ;
 
 
 
