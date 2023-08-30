@@ -20,7 +20,7 @@ T{
     WL-WORD house wg WLG-START!
     WL-WORD house wg WLG-PRED@  WLG-START ?S
 }T
-.(   the adjacents words of a word that don't have a predecessor yet can be searched in the graph. ) CR
+.(   the adjacents words of a word that don't have a predecessor yet can be searched in the graph ) CR
 .(   then these words are updated to have the word as predecessor. ) CR
 T{
     wg WLD-CLEAR-VALUES
@@ -32,4 +32,15 @@ T{
     WW bat wg WLG-PRED@ WW cat ?S
     WW cot wg WLG-PRED@ WW cat ?S
 }T
-
+.(   the words adjacent to a word can be added to a queue for further visit. ) CR
+T{
+    QUEUE ad
+    WW cat ad wg WLG-QUEUE-ADJACENTS
+    ad Q-POP WW cab ?S
+    ad Q-POP WW bat ?S
+    ad Q-POP WW cot ?S
+}T
+.(   after a path search the words forming the path all have a predecessor.  ) CR
+T{
+    WW cat WW dog ad wg WLG-SEARCH-PATH ?TRUE
+}T
