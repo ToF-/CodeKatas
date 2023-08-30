@@ -1,6 +1,7 @@
 \ wl-graph.fs
 REQUIRE wl-word.fs
 REQUIRE wl-dict.fs
+REQUIRE queue.fs
 
 -1 CONSTANT WLG-START
 
