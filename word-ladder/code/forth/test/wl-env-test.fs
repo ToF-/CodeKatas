@@ -13,7 +13,7 @@ T{
     WW fly G WLG-HAS-WORD? ?FALSE
     WW wax G WLG-HAS-WORD? ?TRUE
 }T
-.(   are checked in the graph before search. ) CR
+.(   arguments are checked in the graph before search. ) CR
 T{
     : check-non-existing-word s" foo" G CHECK-WORD ;
     ' check-non-existing-word catch [if] TRUE [then] ?TRUE
