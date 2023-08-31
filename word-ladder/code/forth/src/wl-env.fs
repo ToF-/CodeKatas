@@ -23,7 +23,7 @@ CREATE LINE-BUFFER MAX-LINE ALLOT
 : CHECK-WORD ( ad,l,g -- )
     -ROT S>WL-WORD DUP ROT
     WLG-HAS-WORD? 0= IF
-        PAD WL-WORD>S "  not in the list" PAD +PLACE
+        PAD WL-WORD>S s"  not in the list" PAD +PLACE
         PAD COUNT
         EXCEPTION THROW
     ELSE
