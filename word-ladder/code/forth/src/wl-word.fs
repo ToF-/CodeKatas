@@ -7,7 +7,8 @@
     DUP 0 8 WITHIN IF 
         TRUE -ROT
         OVER + SWAP ?DO
-            I C@ LOWERCASE? 0= IF
+            I C@ DUP LOWERCASE? 0=
+            SWAP [CHAR] ~ <> AND IF
                 DROP FALSE
                 LEAVE
             THEN

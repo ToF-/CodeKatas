@@ -7,4 +7,5 @@ REQUIRE wl-dict-test.fs
 REQUIRE wl-graph-test.fs
 REQUIRE wl-env-test.fs
 REQUIRE wl-letterset-test.fs
+REQUIRE wl-wordgroup-test.fs
 CR BYE
