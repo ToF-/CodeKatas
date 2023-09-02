@@ -23,3 +23,17 @@ T{
     WG mo~se CHAR u GROUP>LETTER>W WW mouse ?S
     WG ~ax CHAR m GROUP>LETTER>W WW max ?S
 }T
+.(   a group dictionnary can be added word groups. ) CR
+T{
+    WL-GROUP-DICT g1
+    WW mouse g1 WLGD-ADD-WORD
+    WG mo~se g1 WLGD-LETTERS PAD LS>S PAD COUNT S" u" ?STR
+    WG m~use g1 WLGD-LETTERS PAD LS>S PAD COUNT S" o" ?STR
+    WG mous~ g1 WLGD-LETTERS PAD LS>S PAD COUNT S" e" ?STR
+    WW house g1 WLGD-ADD-WORD
+    WG ~ouse g1 WLGD-LETTERS PAD LS>S PAD COUNT S" hm" ?STR
+    WW horse g1 WLGD-ADD-WORD
+    WW morse g1 WLGD-ADD-WORD
+    WW worse g1 WLGD-ADD-WORD
+}T
+

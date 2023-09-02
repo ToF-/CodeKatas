@@ -1,5 +1,7 @@
 \ wl-wordgroup.fs
 REQUIRE ./wl-word.fs
+REQUIRE ./wl-dict.fs
+REQUIRE ./wl-letterset.fs
 
 CHAR ~ CONSTANT WILDCARD
 255 CONSTANT G-INFO-MASK
@@ -48,7 +50,7 @@ CREATE WL-GROUP CELL ALLOT
     SWAP WILDCARD-MASK OR
     SWAP G<INDEX! ;
 
-: W>GROUP>LETTER ( g,n -- w,c )
+: W>GROUP>LETTER ( w,n -- g,c )
     2DUP R-OFFSET 255 AND 
     -ROT W>GROUP SWAP ;
 
@@ -57,3 +59,33 @@ CREATE WL-GROUP CELL ALLOT
     ROT OVER ZERO-MASK AND \ c,n,g
     -ROT L-OFFSET OR
     ZERO-INDEX AND ;
+
+: WL-GROUP-DICT ( -- gd )
+    WL-DICT ;
+
+: .WLGD-GROUP-LETTERS ( ls,g -- )
+    PAD WL-WORD>S
+    PAD COUNT 15 AND TYPE ." ->"
+    PAD LS>S
+    PAD COUNT TYPE CR ;
+    
+: WLGD-UPDATE-GROUP ( c,g,gd -- )
+    2DUP WLD-VALUE-OR-NIL     \ c,g,gd,ls
+    -ROT 2SWAP LS-ADD-LETTER  \ g,gd,ls
+    -ROT WLD-UPDATE ;
+
+: WLGD-ADD-WORD ( w,gd -- )
+    OVER WL-WORD-LENGTH 0 ?DO  \ w,gd
+        2DUP SWAP              \ w,gd,gd,w
+        I W>GROUP>LETTER       \ w,gd,gd,g,c
+        SWAP ROT               \ w,gd,c,g,gd
+        WLGD-UPDATE-GROUP      \ w,gd
+    LOOP
+    2DROP ;
+
+: WLGD-LETTERS ( w,gd -- )
+    WLD-VALUE-OR-NIL ;
+
+: .WLGD ( gd -- )
+    ['] .WLGD-GROUP-LETTERS
+    SWAP ACT-EXECUTE ;
