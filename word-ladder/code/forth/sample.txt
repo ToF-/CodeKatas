@@ -2,4 +2,6 @@ bee
 cat
 dog
 wax
+cot
+cog
 

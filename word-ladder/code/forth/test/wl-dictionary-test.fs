@@ -34,5 +34,6 @@ T{
     WG c~t dct WLD-LETTER-SET@ PAD LS>S PAD COUNT S" ao" ?STR
     WW cut dct WLD-UPDATE-WORD-GROUPS
     WG c~t dct WLD-LETTER-SET@ PAD LS>S PAD COUNT S" aou" ?STR
+    dct .WL-DICTIONARY
 }T
 

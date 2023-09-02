@@ -68,9 +68,9 @@ CREATE WL-GROUP CELL ALLOT
 
 : .WLGD-GROUP-LETTERS ( ls,g -- )
     PAD WL-WORD>S
-    PAD COUNT 15 AND TYPE ." ->"
+    PAD COUNT 15 AND TYPE ."  -> "
     PAD LS>S
-    PAD COUNT TYPE CR ;
+    PAD COUNT TYPE ;
     
 : WLGD-UPDATE-GROUP ( c,g,gd -- )
     2DUP WLD-VALUE-OR-NIL     \ c,g,gd,ls

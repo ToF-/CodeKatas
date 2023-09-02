@@ -1,11 +1,13 @@
 \ wordgroups.fs
 REQUIRE wl-wordgroup.fs
+REQUIRE wl-dictionary.fs
 REQUIRE wl-env.fs
 
-WL-GROUP-DICT GD
+WL-DICTIONARY D
 
 : MAIN
-    NEXT-ARG GD WLGD-READ-WORDS
-    GD .WLGD ;
+    NEXT-ARG D WLD-READ-WORDS
+    D .WL-DICTIONARY ;
+
 MAIN BYE
 

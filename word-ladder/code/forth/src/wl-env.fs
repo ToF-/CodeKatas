@@ -1,6 +1,7 @@
 \ wl-env.fs
 REQUIRE wl-graph.fs
 REQUIRE wl-wordgroup.fs
+REQUIRE wl-dictionary.fs
 
 100 CONSTANT MAX-LINE
 CREATE LINE-BUFFER MAX-LINE ALLOT
@@ -32,6 +33,24 @@ CREATE LINE-BUFFER MAX-LINE ALLOT
         ROT TUCK                     \ fd,gd,w,gs
         WLGD-ADD-WORD
         SWAP
+    REPEAT
+    DROP
+    CLOSE-FILE THROW
+    DROP ;
+
+: WLD-READ-WORDS ( ad,l,d -- )
+    -ROT
+    R/O OPEN-FILE THROW
+    BEGIN
+        DUP LINE-BUFFER MAX-LINE ROT
+        READ-LINE THROW
+    WHILE
+        LINE-BUFFER SWAP S>WL-WORD   \ d,fd,w
+        ROT 2DUP                     \ fd,w,d,w,d
+        WLD-ADD-WORD                 \ fd,w,d
+        TUCK                         \ fd,d,w,d
+        WLD-UPDATE-WORD-GROUPS       \ fd,d
+        SWAP                         \ d,fd
     REPEAT
     DROP
     CLOSE-FILE THROW

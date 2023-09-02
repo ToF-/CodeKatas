@@ -45,4 +45,21 @@
     LOOP
     2DROP ;
 
-     
+: .WLD-ELEMENT ( v,k -- )
+    DUP IS-WORD-GROUP? IF
+       .WLGD-GROUP-LETTERS
+    ELSE
+       .WL-WORD SPACE
+        DUP WLD-START = IF
+            DROP ."  -> *"
+        ELSE 
+            ."  -> "
+            .WL-WORD
+        THEN
+    THEN
+    CR ;
+
+: .WL-DICTIONARY ( d -- )
+    ['] .WLD-ELEMENT SWAP ACT-EXECUTE ;
+
+
