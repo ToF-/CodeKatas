@@ -1,4 +1,4 @@
-\ queue.fs
+\ wl-queue.fs
 REQUIRE ffl/car.fs
 
 : QUEUE ( n <name> -- )
