@@ -10,10 +10,13 @@ CHAR ~ CONSTANT WILDCARD
 CREATE WL-GROUP CELL ALLOT
 
 : G>INDEX@ ( l -- n )
-    4 RSHIFT 15 AND ;
+    4 RSHIFT 7 AND ;
 
 : G<INDEX! ( l -- n )
-    4 LSHIFT OR ;
+    8 OR 4 LSHIFT OR ;
+
+: IS-WORD-GROUP? ( wg -- f )
+    8 4 LSHIFT AND ;
 
 : GROUP-INDEX ( wg -- n )
     G>INDEX@ ;
@@ -30,7 +33,7 @@ CREATE WL-GROUP CELL ALLOT
     
 : WG ( <cccc> -- w )
     WW DUP FIND-GROUP-INDEX 
-    4 LSHIFT OR ;
+    G<INDEX! ;
 
 : L-OFFSET ( c,n -- w )
     1+ 8 * LSHIFT ;

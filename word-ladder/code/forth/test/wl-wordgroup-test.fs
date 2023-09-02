@@ -13,6 +13,11 @@ T{
     WW fax 2 W>GROUP>LETTER CHAR x ?S WG fa~ ?S
 }T
 
+.(   a word group is distinct from a word. ) CR
+T{
+    WG ~at IS-WORD-GROUP? ?TRUE
+    WW cat IS-WORD-GROUP? ?FALSE
+}T
 .(   the group index of a group can be found from the pos of the wildcard. ) CR
 T{
     WG cast~le GROUP-INDEX 4 ?S
