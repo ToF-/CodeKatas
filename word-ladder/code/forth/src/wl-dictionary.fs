@@ -135,7 +135,8 @@ REQUIRE ./wl-letterset.fs
 
 : .WLD-ELEMENT ( v,k -- )
     DUP IS-WORD-GROUP? IF
-       .WLGD-GROUP-LETTERS
+        .WL-GROUP SPACE ."  -> "
+       PAD LS>S PAD COUNT TYPE
     ELSE
        .WL-WORD SPACE
         DUP WLD-START = IF

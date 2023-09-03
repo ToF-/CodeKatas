@@ -67,6 +67,7 @@ T{
     WW cog d WLD-PRED@ WW cot ?S
     WW cot d WLD-PRED@ WW cat ?S
     WW cat d WLD-PRED@ WLD-START ?S
+    d .WL-DICTIONARY
 }T
 .(   a dictionary can print the path from a word to another. ) CR
 T{
