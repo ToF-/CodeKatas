@@ -47,5 +47,8 @@ T{
     10 add-words
     WW cat q d WLD-FIND-AJACENTS!
     WW cot d WLD-PRED@ WW cat ?S
+    WW bat d WLD-PRED@ WW cat ?S
+    q Q-POP WW bat ?S
+    q Q-POP WW cot ?S
 }T
 

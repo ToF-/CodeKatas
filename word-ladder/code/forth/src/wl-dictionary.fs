@@ -45,9 +45,51 @@
     LOOP
     2DROP ;
 
+: WLD-MARK-ADJACENT  ( q,w,d,x -- )
+    ROT 2DUP                     \ q,d,x,w,x,w
+    <> IF                        \ q,d,x,w
+        -ROT 2DUP SWAP           \ q,w,d,x,x,d
+        WLD-PRED@ 0= IF          \ q,w,d,x
+            DUP 2SWAP            \ q,x,x,w,d
+            SWAP -ROT            \ q,x,w,x,d
+            WLD-PRED!            \ q,x
+            SWAP Q-APPEND
+        ELSE
+            2DROP 2DROP
+        THEN
+    ELSE
+        2DROP 2DROP
+    THEN ;
 
 : WLD-FIND-AJACENTS! ( w,q,d -- )
-    DROP DROP DROP ;
+    SWAP -ROT                    \ q,w,d
+    OVER WL-WORD-LENGTH 0 ?DO    \ q,w,d
+        OVER I W>GROUP           \ q,w,d,g
+        2DUP SWAP                \ q,w,d,g,g,d
+        WLD-LETTER-SET@ PAD LS>S \ q,w,d,g
+        PAD COUNT                \ q,w,d,g,ad,l
+        OVER + SWAP ?DO          \ q,w,d,g
+            DUP I C@             \ q,w,d,g,g,c
+            GROUP>LETTER>W       \ q,w,d,g,x
+            4 PICK               \ q,w,d,g,x,q
+            4 PICK               \ q,w,d,g,x,q,w
+            ROT                  \ q,w,d,g,q,w,x
+            4 PICK               \ q,w,d,g,q,w,x,d
+            SWAP                 \ q,w,d,g,q,w,d,x
+            WLD-MARK-ADJACENT    \ q,w,d,g
+        LOOP
+        DROP
+    LOOP
+    DROP 2DROP ;
+    \ for each groups of the word
+    \ find the letter set of this group in the dictionary
+    \ for each letter of the group
+    \ form the word with this group and letter
+    \ if the word is different from w
+    \ find the prececessor of the word in the dictionary
+    \ if the word has no predecessor
+    \ set the precedessor of this word to w
+    \ add this word to the queue
 
 : .WLD-ELEMENT ( v,k -- )
     DUP IS-WORD-GROUP? IF
