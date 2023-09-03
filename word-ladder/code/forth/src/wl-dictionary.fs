@@ -135,6 +135,7 @@ REQUIRE ./wl-letterset.fs
     2DROP R> 0= ;
 
 : .WLD-ELEMENT ( v,k -- )
+    2DUP hex 16 .R space 16 .R space decimal
     DUP IS-WORD-GROUP? IF
         .WL-GROUP SPACE ."  -> "
        PAD LS>S PAD COUNT TYPE
