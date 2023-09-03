@@ -1,9 +1,18 @@
 \ wl-dictionary.fs
+REQUIRE ffl/act.fs
+REQUIRE ./wl-queue.fs
+REQUIRE ./wl-word.fs
+REQUIRE ./wl-wordgroup.fs
+REQUIRE ./wl-letterset.fs
 
 -1 CONSTANT WLD-START
 
 : WL-DICTIONARY ( <name> -- )
     ACT-CREATE ;
+
+: WLD-EMPTY ( d -- )
+    ACT-CLEAR ;
+
 
 : WLD-PRED! ( p,t,d -- )
     ACT-INSERT ;
@@ -45,14 +54,26 @@
     LOOP
     2DROP ;
 
+: (WLD-CLEAR-PRED) ( k,d -- )
+    0 -ROT ACT-INSERT ;
+
+: WLD-CLEAR-PRED ( d,v,k -- d )
+    NIP DUP IS-WORD-GROUP? 0= IF
+        OVER (WLD-CLEAR-PRED)
+    ELSE
+        DROP
+    THEN ;
+
+: WLD-CLEAR-PREDS ( d -- )
+    ['] WLD-CLEAR-PRED OVER ACT-EXECUTE DROP ;
+
 : WLD-MARK-ADJACENT  ( q,w,d,x -- )
     ROT 2DUP                     \ q,d,x,w,x,w
     <> IF                        \ q,d,x,w
         -ROT 2DUP SWAP           \ q,w,d,x,x,d
         WLD-PRED@ 0= IF          \ q,w,d,x
-            DUP 2SWAP            \ q,x,x,w,d
-            SWAP -ROT            \ q,x,w,x,d
-            WLD-PRED!            \ q,x
+            DUP 2SWAP SWAP -ROT  \ q,x,w,x,d
+            WLD-PRED!
             SWAP Q-APPEND
         ELSE
             2DROP 2DROP
@@ -91,6 +112,27 @@
     \ set the precedessor of this word to w
     \ add this word to the queue
 
+: WLD-FIND-PATH! ( t,s,q,d -- f )
+    OVER Q-EMPTY
+    DUP WLD-CLEAR-PREDS
+    ROT >R                    \ t,q,d
+    ROT DUP 2OVER             \ q,d,t,t,q,d
+    -ROT Q-APPEND             \ q,d,t,d
+    WLD-START!                \ q,d
+    BEGIN
+        OVER Q-EMPTY? 0=
+    WHILE
+        OVER Q-HEAD@ R@ = IF
+            OVER Q-EMPTY
+            R> DROP 0 >R
+        ELSE
+            2DUP OVER Q-POP
+            -ROT
+            WLD-FIND-AJACENTS!
+        THEN
+    REPEAT
+    2DROP R> 0= ;
+
 : .WLD-ELEMENT ( v,k -- )
     DUP IS-WORD-GROUP? IF
        .WLGD-GROUP-LETTERS
@@ -108,4 +150,19 @@
 : .WL-DICTIONARY ( d -- )
     ['] .WLD-ELEMENT SWAP ACT-EXECUTE ;
 
+: (.WLD-PATH) ( w,g -- )
+    BEGIN
+        OVER WLD-START <> 
+    WHILE
+        OVER .WL-WORD SPACE
+        TUCK WLD-PRED@
+        SWAP
+    REPEAT
+    2DROP ;
 
+: .WLD-PATH ( w,g -- )
+    2DUP WLD-HAS-WORD? IF
+        (.WLD-PATH)
+    ELSE
+        2DROP
+    THEN ;

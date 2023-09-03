@@ -27,7 +27,6 @@ T{
     S" sample.txt" dct WLD-READ-WORDS
     WG ~ee dct WLD-LETTER-SET@ PAD LS>S PAD COUNT S" b" ?STR
     WW bee dct WLD-HAS-WORD? ?TRUE
-    dct .WL-DICTIONARY
 }T
 .(   arguments are checked in the graph before search. ) CR
 T{

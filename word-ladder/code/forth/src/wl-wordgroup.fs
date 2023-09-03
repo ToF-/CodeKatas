@@ -53,14 +53,6 @@ CREATE WL-GROUP CELL ALLOT
     SWAP WILDCARD-MASK OR
     SWAP G<INDEX! ;
 
-: W>GROUPS ( w -- g1,..gn,n )
-    DUP WL-WORD-LENGTH >R
-    R@ 0 ?DO                \ w
-        DUP I W>GROUP       \ w,g
-        SWAP
-    LOOP                    \ ..,w
-    DROP R> ;
-
 : W>GROUP>LETTER ( w,n -- g,c )
     2DUP R-OFFSET 255 AND 
     -ROT W>GROUP SWAP ;
@@ -70,15 +62,6 @@ CREATE WL-GROUP CELL ALLOT
     ROT OVER ZERO-MASK AND \ c,n,g
     -ROT L-OFFSET OR
     ZERO-INDEX AND ;
-
-: GROUP-LETTERS>WORDS ( ls,wg -- w1..wn,n )
-    SWAP PAD LS>S               \ wg
-    PAD COUNT DUP >R            \ wg,ad,n
-    OVER + SWAP DO              \ wg
-        DUP I C@                \ wg,wg,c
-        GROUP>LETTER>W          \ wg,ww
-        SWAP
-    LOOP R>                     ;
 
 : WL-GROUP-DICT ( -- gd )
     WL-DICT ;

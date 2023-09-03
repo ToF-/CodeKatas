@@ -35,7 +35,6 @@ T{
     WG c~t dct WLD-LETTER-SET@ PAD LS>S PAD COUNT S" ao" ?STR
     WW cut dct WLD-UPDATE-WORD-GROUPS
     WG c~t dct WLD-LETTER-SET@ PAD LS>S PAD COUNT S" aou" ?STR
-    dct .WL-DICTIONARY
 }T
 .(   a dictionary can find adjacent words to a word, mark their predecessor and add them to a queue. ) CR
 T{
@@ -51,4 +50,27 @@ T{
     q Q-POP WW bat ?S
     q Q-POP WW cot ?S
 }T
+.(   a dictionary can clear all its word predecessors ) CR
+T{
+    d WLD-CLEAR-PREDS
+    WW cat d WLD-PRED@ ?FALSE
+    WW cot d WLD-PRED@ ?FALSE
+}T
+.(   a dictionary can find the path from a word to another word if it exists. ) CR
+T{
+    q Q-EMPTY
+    d WLD-EMPTY
+    WW bat WW cab WW cat WW cot WW dab WW dog WW cog WW fog WW fox WW fly 
+    10 add-words
+    WW cat WW dog q d WLD-FIND-PATH! ?TRUE
+    WW dog d WLD-PRED@ WW cog ?S
+    WW cog d WLD-PRED@ WW cot ?S
+    WW cot d WLD-PRED@ WW cat ?S
+    WW cat d WLD-PRED@ WLD-START ?S
+}T
+.(   a dictionary can print the path from a word to another. ) CR
+T{
+    WW dog d .WLD-PATH
+}T
+
 
