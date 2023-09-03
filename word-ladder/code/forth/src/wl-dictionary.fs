@@ -41,16 +41,17 @@ REQUIRE ./wl-letterset.fs
 : WLD-LETTER-SET! ( ls,g,d -- )
     ACT-INSERT ;
 
+: WLD-UPDATE-WORD-GROUP ( c,g,d -- )
+    2DUP WLD-LETTER-SET@            \ c,g,d,ls
+    -ROT 2SWAP LS-ADD-LETTER        \ g,d,ls'
+    -ROT WLD-LETTER-SET! ;
+
 : WLD-UPDATE-WORD-GROUPS ( w,d -- )
     OVER WL-WORD-LENGTH 0 ?DO  \ w,d
         2DUP SWAP              \ w,d,d,w
         I W>GROUP>LETTER       \ w,d,d,g,c
-        >R 2DUP R>             \ w,d,d,g,d,g,c
-        -ROT SWAP              \ w,d,d,g,c,g,d
-        WLD-LETTER-SET@        \ w,d,d,g,c,ls
-        LS-ADD-LETTER          \ w,d,d,g,ls'
-        SWAP ROT               \ w,d,ls',g,d
-        WLD-LETTER-SET!        \ w,d
+        SWAP ROT 
+        WLD-UPDATE-WORD-GROUP 
     LOOP
     2DROP ;
 
@@ -82,6 +83,15 @@ REQUIRE ./wl-letterset.fs
         2DROP 2DROP
     THEN ;
 
+\ for each group of the word
+\ find the letter set of this group in the dictionary
+\ for each letter of the group
+\ form the word with this group and letter
+\ if the word is different from w
+\ find the prececessor of the word in the dictionary
+\ if the word has no predecessor
+\ set the precedessor of this word to w
+\ then add this word to the queue
 : WLD-FIND-AJACENTS! ( w,q,d -- )
     SWAP -ROT                    \ q,w,d
     OVER WL-WORD-LENGTH 0 ?DO    \ q,w,d
@@ -102,15 +112,6 @@ REQUIRE ./wl-letterset.fs
         DROP
     LOOP
     DROP 2DROP ;
-    \ for each groups of the word
-    \ find the letter set of this group in the dictionary
-    \ for each letter of the group
-    \ form the word with this group and letter
-    \ if the word is different from w
-    \ find the prececessor of the word in the dictionary
-    \ if the word has no predecessor
-    \ set the precedessor of this word to w
-    \ add this word to the queue
 
 : WLD-FIND-PATH! ( t,s,q,d -- f )
     OVER Q-EMPTY
