@@ -19,7 +19,7 @@ T{
 T{
     WL-GROUP-DICT GD
     S" sample.txt" GD WLGD-READ-WORDS
-    WW ~ee gd WLGD-LETTERS PAD LS>S PAD COUNT S" b" ?STR
+    WG ~ee gd WLGD-LETTERS PAD LS>S PAD COUNT S" b" ?STR
 }T
 .(  a group dictionary can be loaded with words and their word groups. ) CR
 T{

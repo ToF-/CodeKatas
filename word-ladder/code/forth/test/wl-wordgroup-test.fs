@@ -1,6 +1,7 @@
 \ wl-wordgroup-test.fs
 REQUIRE ffl/tst.fs
 REQUIRE ../src/wl-wordgroup.fs
+REQUIRE ../src/wl-letterset.fs
 
 CR .( word group ) CR
 
@@ -12,7 +13,26 @@ T{
     WW horse 0 W>GROUP>LETTER CHAR h ?S WG ~orse ?S
     WW fax 2 W>GROUP>LETTER CHAR x ?S WG fa~ ?S
 }T
-
+.(   the word groups of a word can be put on the stack, with number of groups at the top. ) CR
+T{
+    WW draft W>GROUPS
+    5 ?S WG draf~ ?S WG dra~t ?S WG dr~ft ?S WG d~aft ?S WG ~raft ?S
+}T
+.(   the words of a word group and its letters can be put on the stack, with the number of words at the top. ) CR
+T{
+    WG ~orse
+    LS-EMPTY
+    CHAR w SWAP LS-ADD-LETTER
+    CHAR h SWAP LS-ADD-LETTER
+    CHAR m SWAP LS-ADD-LETTER
+    SWAP
+    GROUP-LETTERS>WORDS
+    3 ?S
+    WW worse ?S
+    WW morse ?S
+    WW horse ?S
+}T
+    
 .(   a word group is distinct from a word. ) CR
 T{
     WG ~at IS-WORD-GROUP? ?TRUE

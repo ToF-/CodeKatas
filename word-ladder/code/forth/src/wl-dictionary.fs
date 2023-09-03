@@ -45,6 +45,10 @@
     LOOP
     2DROP ;
 
+
+: WLD-FIND-AJACENTS! ( w,q,d -- )
+    DROP DROP DROP ;
+
 : .WLD-ELEMENT ( v,k -- )
     DUP IS-WORD-GROUP? IF
        .WLGD-GROUP-LETTERS
