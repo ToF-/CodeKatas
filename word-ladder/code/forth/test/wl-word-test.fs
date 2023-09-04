@@ -14,7 +14,7 @@ T{
 }T
 .(   a wl word is stored as a cell value and can be converted back to a string. ) CR
 T{
-     WL-WORD horse PAD WL-WORD>S PAD COUNT S" horse" ?STR
+     WW horse PAD WL-WORD>S PAD COUNT S" horse" ?STR
      S" mouse" S>WL-WORD PAD WL-WORD>S PAD COUNT S" mouse" ?STR
 }T
 .(   a wl word can give its length. ) CR
