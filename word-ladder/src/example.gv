@@ -4,18 +4,18 @@ strict digraph ip_map {
     cab -> { cat } [dir=none];
     cab -> { car } [dir=none];
     car -> { cat } [dir=none];
-    cot -> { cat } [dir=none];
-    cow -> { cot } [dir=none];
-    cow -> { cog } [dir=none];
-    cog -> { cot } [dir=none];
     dab -> { cab } [dir=none];
+    cot -> { cat } [dir=none];
+    cog -> { cot } [dir=none];
+    cow -> { cot } [dir=none];
+    cog -> { cow } [dir=none];
+    dog -> { cog } [dir=none];
     dot -> { cot } [dir=none];
     dag -> { dab } [dir=none];
     dam -> { dab } [dir=none];
-    dog -> { cog } [dir=none];
+    dam -> { dag } [dir=none];
     doc -> { dog } [dir=none];
     doc -> { dot } [dir=none];
     dog -> { dot } [dir=none];
-    dog -> { dag } [dir=none];
-    dam -> { dag } [dir=none];
+    dag -> { dog } [dir=none];
 }

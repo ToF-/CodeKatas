@@ -2,9 +2,9 @@
 
 How would we solve this problem by hand?
 
-Let's suppose we are given a list that is limited to 10 words : 
+Let's suppose we are given a list that is limited to these words : 
 
-_cab_, _cat_, _car_, _cog_, _cot_, _cow_, _dab_, _dag_, _dam_, _doc_, _dog_, _dot_.
+_cab_, _car_, _cat_, _cog_, _cot_, _cow_, _dab_, _dag_, _dam_, _doc_, _dog_, _dot_.
 
 
 We want to find the shortest path between the words _dog_ and _cat_.
