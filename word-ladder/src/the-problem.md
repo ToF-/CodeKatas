@@ -11,6 +11,9 @@ Examples :
 > wordladder brain cells
 brain braid brand brans brats beats belts bells cells
 
-> wordladder devil angel
+> wordladder never again
 no path
+
+> workladder merci thank
+merci is not in the list
 ```

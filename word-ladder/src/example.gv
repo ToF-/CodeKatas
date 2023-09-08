@@ -1,16 +1,21 @@
-strict graph ip_map {
+strict digraph ip_map {
     node [colorscheme="SVG",width=0.5,height=0.2,shape = ellipse,fontcolor="darkcyan",fontsize=12,fontname="Courier",color="darkcyan"];
     edge [colorscheme="SVG",color="darkcyan",fontcolor="darkcyan",fontsize=10,fontname="Courier"];
-    cab -- { cat };
-    cab -- { dab };
-    cat -- { cot };
-    cog -- { cot };
-    cog -- { dog };
-    cot -- { dot };
-    dab -- { dag };
-    dab -- { dam };
-    dag -- { dam };
-    dag -- { dog };
-    doc -- { dog };
-    dog -- { dot };
+    cab -> { cat } [dir=none];
+    cab -> { car } [dir=none];
+    car -> { cat } [dir=none];
+    cot -> { cat } [dir=none];
+    cow -> { cot } [dir=none];
+    cow -> { cog } [dir=none];
+    cog -> { cot } [dir=none];
+    dab -> { cab } [dir=none];
+    dot -> { cot } [dir=none];
+    dag -> { dab } [dir=none];
+    dam -> { dab } [dir=none];
+    dog -> { cog } [dir=none];
+    doc -> { dog } [dir=none];
+    doc -> { dot } [dir=none];
+    dog -> { dot } [dir=none];
+    dog -> { dag } [dir=none];
+    dam -> { dag } [dir=none];
 }
