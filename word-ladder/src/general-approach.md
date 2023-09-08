@@ -2,7 +2,20 @@
 
 How would we solve this problem by hand?
 
-let's suppose we are given a list that is limited to 10 words : 
+Let's suppose we are to search a word ladder between _truck_ and _train_.
+
+~ruck  -> t
+t~uck  -> r
+tr~ck  -> track, trick, truck
+tru~k  -> truck, trunk
+truc~  -> truce, truck
+
+the words adjacent to truck are: track, trick, trunk, truce
+
+~rack  -> brack, crack, track, wrack
+trac~  -> trace, tract
+
+Let's suppose we are given a list that is limited to 10 words : 
 
 _cab_, _cat_, _cog_, _cot_, _dab_, _dag_, _dam_, _doc_, _dog_, _dot_.
 

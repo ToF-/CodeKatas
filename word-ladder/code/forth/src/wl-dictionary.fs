@@ -113,6 +113,9 @@ REQUIRE ./wl-letterset.fs
     LOOP
     DROP 2DROP ;
 
+: .WORD-QUEUE ( w -- )
+   .WL-WORD SPACE ;
+
 : WLD-FIND-PATH! ( t,s,q,d -- f )
     OVER Q-EMPTY
     DUP WLD-CLEAR-PREDS
@@ -121,8 +124,10 @@ REQUIRE ./wl-letterset.fs
     -ROT Q-APPEND             \ q,d,t,d
     WLD-START!                \ q,d
     BEGIN
+        \ OVER ['] .WORD-QUEUE SWAP CAR-EXECUTE CR
         OVER Q-EMPTY? 0=
     WHILE
+        \ OVER Q-HEAD@ .WL-WORD SPACE
         OVER Q-HEAD@ R@ = IF
             OVER Q-EMPTY
             R> DROP 0 >R
@@ -152,6 +157,17 @@ REQUIRE ./wl-letterset.fs
 
 : .WL-DICTIONARY ( d -- )
     ['] .WLD-ELEMENT SWAP ACT-EXECUTE ;
+
+: .WLD-GROUP-ELEMENT ( v,k -- )
+    DUP IS-WORD-GROUP? IF
+        .WL-GROUP SPACE ."  -> "
+        PAD LS>S PAD COUNT TYPE CR
+    ELSE
+        2DROP
+    THEN ;
+
+: .WL-GROUPS ( d -- )
+    ['] .WLD-GROUP-ELEMENT SWAP ACT-EXECUTE ;
 
 : (.WLD-PATH) ( w,g -- )
     BEGIN
