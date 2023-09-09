@@ -17,5 +17,22 @@ T{
 .(   the path from a word until the start word can be displayed. ) CR
 T{
     s" worse" s" morse" ADD-ADJACENT-WORDS
-    s" morse" .WORD-PATH
+    s" morse" .WORD-PATH CR
+}T
+.(   the wordkey graph, group dictionary and visit queue can be used to find explore the words. ) CR
+T{
+    CLEAR-VISIT-QUEUE
+    s" brain" ADD-TO-VISIT
+    hex  SEARCH-ADJACENT-WORDS!
+    s" train" PAD PREDECESSOR@>S PAD COUNT S" brain" ?STR
+    s" grain" PAD PREDECESSOR@>S PAD COUNT S" brain" ?STR
+    s" drain" PAD PREDECESSOR@>S PAD COUNT S" brain" ?STR
+    s" bruin" PAD PREDECESSOR@>S PAD COUNT S" brain" ?STR
+    s" brawn" PAD PREDECESSOR@>S PAD COUNT S" brain" ?STR
+    s" braid" PAD PREDECESSOR@>S PAD COUNT S" brain" ?STR
+    VISIT-QUEUE Q-POP PAD WORDKEY>S PAD COUNT S" drain" ?STR
+    VISIT-QUEUE Q-POP PAD WORDKEY>S PAD COUNT S" grain" ?STR
+    VISIT-QUEUE Q-POP PAD WORDKEY>S PAD COUNT S" train" ?STR
+    VISIT-QUEUE Q-POP PAD WORDKEY>S PAD COUNT S" bruin" ?STR
+    VISIT-QUEUE Q-POP PAD WORDKEY>S PAD COUNT S" brawn" ?STR
 }T
