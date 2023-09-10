@@ -4,9 +4,16 @@ REQUIRE ffl/tst.fs
 REQUIRE ../src/group-dictionary.fs
 
 CR .( group dictionary ) CR
+.(   initially the group dictionnary is empty ) CR
+T{
+    GROUP-DICTIONARY-LENGTH@ 0 ?S
+}T
 .(   the group dictionary can be added word groups and their letters. ) CR
 T{
-    CHAR h S" ~orse" UPDATE-GROUP
+    S" horse" SMALL-STRING 0 UPDATE-NTH-GROUP
+    GROUP-DICTIONARY-LENGTH@ 1 ?S
+}T
+BYE
     CHAR m S" ~orse" UPDATE-GROUP
     S" ~orse" GROUP-LETTERS PAD LETTER-SET>S PAD COUNT s" hm" ?STR
 }T
