@@ -23,7 +23,7 @@ T{
 .(   a path from a word until the target can be followed. ) CR
 T{
     SS" worse" SS" morse" ADD-ADJACENT-WORD
-    CREATE FOO 8 CELLS ALLOT VARIABLE FOO-PTR FOO FOO-PTR ! 
+    CREATE FOO 30 CELLS ALLOT VARIABLE FOO-PTR FOO FOO-PTR !
     : TRACK-SMALL-STRING ( ss -- ) FOO-PTR @ ! CELL FOO-PTR +! ;
     SS" morse" ' TRACK-SMALL-STRING WORD-PATH-EXECUTE
     FOO 0 CELLS + @ SS" morse" ?S
@@ -41,45 +41,25 @@ T{
     CLEAR-VISIT-QUEUE
     VISIT-QUEUE Q-EMPTY? ?TRUE
     SS" cells" VISIT-ADJACENTS
-    VISIT-QUEUE Q-EMPTY? ?FALSE
-    VISIT-QUEUE Q-POP SS" bells" ?S
-    VISIT-QUEUE Q-POP SS" dells" ?S
-    VISIT-QUEUE Q-POP SS" fells" ?S
-    VISIT-QUEUE Q-POP SS" hells" ?S
-    VISIT-QUEUE Q-POP SS" jells" ?S
-    VISIT-QUEUE Q-POP SS" sells" ?S
-    VISIT-QUEUE Q-POP SS" tells" ?S
-    VISIT-QUEUE Q-POP SS" wells" ?S
-    VISIT-QUEUE Q-POP SS" yells" ?S
-    VISIT-QUEUE Q-POP SS" calls" ?S
-    VISIT-QUEUE Q-POP SS" cills" ?S
-    VISIT-QUEUE Q-POP SS" culls" ?S
-    VISIT-QUEUE Q-POP SS" ceils" ?S
-    VISIT-QUEUE Q-POP SS" cello" ?S
-}T
-
-BYE
-
-.(   the word graph, group dictionary and visit queue can be used to find explore the words. ) CR
-T{
-    CLEAR-VISIT-QUEUE
-    s" brain" ADD-TO-VISIT
-    SEARCH-ADJACENT-WORDS!
-    s" train" PAD PREDECESSOR@>S PAD COUNT S" brain" ?STR
-    s" grain" PAD PREDECESSOR@>S PAD COUNT S" brain" ?STR
-    s" drain" PAD PREDECESSOR@>S PAD COUNT S" brain" ?STR
-    s" bruin" PAD PREDECESSOR@>S PAD COUNT S" brain" ?STR
-    s" brawn" PAD PREDECESSOR@>S PAD COUNT S" brain" ?STR
-    s" braid" PAD PREDECESSOR@>S PAD COUNT S" brain" ?STR
-    VISIT-QUEUE Q-POP PAD WORDKEY>S PAD COUNT S" drain" ?STR
-    VISIT-QUEUE Q-POP PAD WORDKEY>S PAD COUNT S" grain" ?STR
-    VISIT-QUEUE Q-POP PAD WORDKEY>S PAD COUNT S" train" ?STR
-    VISIT-QUEUE Q-POP PAD WORDKEY>S PAD COUNT S" bruin" ?STR
-    VISIT-QUEUE Q-POP PAD WORDKEY>S PAD COUNT S" brawn" ?STR
+    [BEGIN] VISIT-QUEUE Q-EMPTY? 0= [WHILE] VISIT-QUEUE Q-POP [REPEAT]
+    SS" cello" ?S SS" ceils" ?S SS" culls" ?S SS" cills" ?S SS" calls" ?S SS" yells" ?S SS" wells" ?S
+    SS" tells" ?S SS" sells" ?S SS" jells" ?S SS" hells" ?S SS" fells" ?S SS" dells" ?S SS" bells" ?S
+    SS" cello" PREDECESSOR@ ?TRUE SS" cells" ?S
+    SS" bells" PREDECESSOR@ ?TRUE SS" cells" ?S
 }T
 .(   the word graph, group dictionary and visit queue can be used to find the shortest path between two words. ) CR
 T{
-    s" trait" s" brain" SEARCH-PATH! ?TRUE
-    s" brain" .WORD-PATH CR
-
+    SS" cells" SS" brain" FIND-SHORTEST-PATH ?TRUE
+    FOO FOO-PTR !
+    SS" brain" ' TRACK-SMALL-STRING WORD-PATH-EXECUTE
+    FOO 0 CELLS + @ SS" brain" ?S
+    FOO 1 CELLS + @ SS" braid" ?S
+    FOO 2 CELLS + @ SS" brand" ?S
+    FOO 3 CELLS + @ SS" brans" ?S
+    FOO 4 CELLS + @ SS" brats" ?S
+    FOO 5 CELLS + @ SS" beats" ?S
+    FOO 6 CELLS + @ SS" belts" ?S
+    FOO 7 CELLS + @ SS" bells" ?S
+    FOO 8 CELLS + @ SS" cells" ?S
+    SS" devil" SS" angel" FIND-SHORTEST-PATH ?FALSE
 }T
