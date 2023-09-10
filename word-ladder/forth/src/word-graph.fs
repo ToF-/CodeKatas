@@ -46,13 +46,13 @@ QUEUE VISIT-QUEUE
         OVER + SWAP ?DO                    \ p,g
             I C@ OVER GROUP>WORD           \ p,g,w
             DUP PREDECESSOR@ 0= IF         \ p,g,w
-                ROT                        \ g,w,p
-                DUP ROT                    \ g,p,p,w
+                ROT DUP ROT                \ g,p,p,w
+                DUP VISIT-QUEUE Q-APPEND   \ g,p,p,w
                 ADD-ADJACENT-WORD          \ g,p
                 SWAP                       \ p,g
-            ELSE
-                DROP                       \ p,g
-            THEN
+            ELSE                           \ p,g,w,p
+                2DROP                      \ p,g
+            THEN                           \ p,g
         LOOP DROP                          \ p
     LOOP DROP ;
 

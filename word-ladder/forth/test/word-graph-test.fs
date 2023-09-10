@@ -39,9 +39,23 @@ T{
 T{
     SS" cells" SET-TARGET-WORD
     CLEAR-VISIT-QUEUE
-    VISIT-QUEUE Q-EMPTY ?TRUE
-    SS" cells" hex dbg VISIT-ADJACENTS
-    VISIT-QUEUE Q-EMPTY ?FALSE
+    VISIT-QUEUE Q-EMPTY? ?TRUE
+    SS" cells" VISIT-ADJACENTS
+    VISIT-QUEUE Q-EMPTY? ?FALSE
+    VISIT-QUEUE Q-POP SS" bells" ?S
+    VISIT-QUEUE Q-POP SS" dells" ?S
+    VISIT-QUEUE Q-POP SS" fells" ?S
+    VISIT-QUEUE Q-POP SS" hells" ?S
+    VISIT-QUEUE Q-POP SS" jells" ?S
+    VISIT-QUEUE Q-POP SS" sells" ?S
+    VISIT-QUEUE Q-POP SS" tells" ?S
+    VISIT-QUEUE Q-POP SS" wells" ?S
+    VISIT-QUEUE Q-POP SS" yells" ?S
+    VISIT-QUEUE Q-POP SS" calls" ?S
+    VISIT-QUEUE Q-POP SS" cills" ?S
+    VISIT-QUEUE Q-POP SS" culls" ?S
+    VISIT-QUEUE Q-POP SS" ceils" ?S
+    VISIT-QUEUE Q-POP SS" cello" ?S
 }T
 
 BYE
