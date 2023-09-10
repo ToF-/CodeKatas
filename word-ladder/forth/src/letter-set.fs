@@ -1,26 +1,40 @@
 \ letter-set.fs
 
-27 CONSTANT MAX-LETTER
+0  CONSTANT LS-EMPTY
 CHAR a 1- CONSTANT LS-MIN
+CHAR z 1+ LS-MIN - CONSTANT MAX-LETTER-SET
+CREATE LS-CHARS-BUFFER MAX-LETTER-SET ALLOT
 
-: LS-EMPTY ( -- ls )
-    0 ;
+: LS-LENGTH@ ( ls -- n )
+    0 SWAP
+    MAX-LETTER-SET 0 DO
+        DUP 1 AND IF SWAP 1+ SWAP THEN
+        2/
+    LOOP DROP ;
 
-: C>LETTER ( c -- n )
+: CHAR>LETTER ( c -- n )
     LS-MIN - ;
 
-: LETTER>C ( n -- c )
+: LETTER>CHAR ( n -- c )
     LS-MIN + ;
 
-: LETTER-SET>S ( ls,addr -- )
-    DUP -ROT
-    MAX-LETTER 0 DO
-        OVER 1 AND IF
-            1+ I LETTER>C OVER C!
-        THEN
-        SWAP 2/ SWAP
-    LOOP
-    NIP OVER - SWAP C! ;
+: LS-ADD-CHAR ( c,ls -- ls' )
+    SWAP CHAR>LETTER 1 SWAP LSHIFT OR ;
 
-: LS-ADD-LETTER ( c,ls -- ls' )
-    SWAP C>LETTER 1 SWAP LSHIFT OR ;
+: LS-CHARS>C! ( c -- )
+    LS-CHARS-BUFFER COUNT
+    DUP >R + C!  R> 1+
+    LS-CHARS-BUFFER C! ;
+
+: LS-CHARS ( ls -- addr,l )
+    0 LS-CHARS-BUFFER C!
+    MAX-LETTER-SET 0 DO
+        DUP 1 AND IF
+            I LETTER>CHAR LS-CHARS>C!
+        THEN
+        2/
+    LOOP
+    DROP
+    LS-CHARS-BUFFER COUNT ;
+
+
