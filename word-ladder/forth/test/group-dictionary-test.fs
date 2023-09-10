@@ -34,3 +34,8 @@ T{
     SS" paper" 1 NTH-GROUP GROUP-LETTERS@ S" ai" ?STR
     SS" start" 4 NTH-GROUP GROUP-LETTERS@ S" ekst" ?STR
 }T
+.(   the group dictionnary can check that a word is in the dictionary. ) CR
+T{
+    SS" paper" hex dbg WORD-EXIST? ?TRUE
+    SS" fubar" WORD-EXIST? ?FALSE
+}T
