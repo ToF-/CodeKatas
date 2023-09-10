@@ -7,6 +7,9 @@ CREATE SS-BUFFER CELL ALLOT
     SS-BUFFER PLACE
     SS-BUFFER @ ;
 
+: SS" ( <cccc"> -- ss )
+   [CHAR] " WORD COUNT SMALL-STRING ;
+
 : SMALL-STRING-S ( ss -- add,l )
     SS-BUFFER !
     SS-BUFFER COUNT ;
@@ -18,4 +21,6 @@ CREATE SS-BUFFER CELL ALLOT
 : SMALL-STRING-C@ ( ss,n -- c )
     SWAP SMALL-STRING-S DROP + C@ ;
 
+: SMALL-STRING-LENGTH@ ( ss -- n )
+    255 AND ;
 

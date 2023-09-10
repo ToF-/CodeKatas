@@ -10,24 +10,27 @@ T{
 }T
 .(   the group dictionary can be added word groups and their letters. ) CR
 T{
-    S" horse" SMALL-STRING 0 UPDATE-NTH-GROUP
+    SS" horse" 0 UPDATE-NTH-GROUP
     GROUP-DICTIONARY-LENGTH@ 1 ?S
 }T
-BYE
-    CHAR m S" ~orse" UPDATE-GROUP
-    S" ~orse" GROUP-LETTERS PAD LETTER-SET>S PAD COUNT s" hm" ?STR
+.(   looking up the dictionary for a group gives its letters. ) CR
+T{
+    SS" horse" 0 NTH-GROUP
+    GROUP-LETTERS@ S" h" ?STR
 }T
 .(   adding a word to the dictionary updates all its groups. ) CR
 T{
-    s" mouse" ADD-WORD-GROUPS
-    s" house" ADD-WORD-GROUPS
-    s" horse" ADD-WORD-GROUPS
-    s" ~ouse" GROUP-LETTERS PAD LETTER-SET>S PAD COUNT s" hm" ?STR
-    s" ho~se" GROUP-LETTERS PAD LETTER-SET>S PAD COUNT s" ru" ?STR
+    SS" mouse" ADD-WORD-GROUPS
+    SS" house" ADD-WORD-GROUPS
+    SS" horse" ADD-WORD-GROUPS
+    SS" house" 0 NTH-GROUP GROUP-LETTERS@ S" hm" ?STR
+    SS" house" 2 NTH-GROUP GROUP-LETTERS@ S" ru" ?STR
 }T
 .(   all the words from a file can be added to the dictionary. ) CR
 T{
     s" ../data/www-cs-faculty.stanford.edu_~knuth_sgb-words.txt" READ-WORDS
     GROUP-DICTIONARY HCT-LENGTH@ 20859 ?S
-    s" ~ouse" GROUP-LETTERS PAD LETTER-SET>S PAD COUNT s" dhlmrsy" ?STR
+    SS" house" 0 NTH-GROUP GROUP-LETTERS@ S" dhlmrsy" ?STR
+    SS" paper" 1 NTH-GROUP GROUP-LETTERS@ S" ai" ?STR
+    SS" start" 4 NTH-GROUP GROUP-LETTERS@ S" ekst" ?STR
 }T
