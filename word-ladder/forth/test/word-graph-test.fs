@@ -10,7 +10,7 @@ T{
 }T
 .(   after adding a target word, this word can be found, and its predecessor is itself. ) CR
 T{
-    SS" horse" ADD-TARGET-WORD
+    SS" horse" SET-TARGET-WORD
     SS" horse" PREDECESSOR@ ?TRUE SS" horse" ?S
     SS" horse" IS-TARGET-WORD? ?TRUE
 }T
@@ -30,18 +30,22 @@ T{
     FOO 1 CELLS + @ SS" worse" ?S
     FOO 2 CELLS + @ SS" horse" ?S
 }T
+.(   after clearing the word-graph, no word can be found. ) CR
+T{
+    WORD-GRAPH-CLEAR
+    SS" horse" PREDECESSOR@ ?FALSE
+}T
+.(   visit a word in the graph fills the visit queue with adjacent words not visited yet. ) CR
+T{
+    SS" cells" SET-TARGET-WORD
+    CLEAR-VISIT-QUEUE
+    VISIT-QUEUE Q-EMPTY ?TRUE
+    SS" cells" hex dbg VISIT-ADJACENTS
+    VISIT-QUEUE Q-EMPTY ?FALSE
+}T
 
 BYE
 
-.(   the path from a word until the start word can be displayed. ) CR
-T{
-    s" worse" IS-START-WORD? ?FALSE
-    s" morse" IS-START-WORD? ?FALSE
-    s" horse" IS-START-WORD? ?TRUE
-    s" worse" s" morse" ADD-ADJACENT-WORDS
-    CR s" horse" .WORD-PATH CR
-    CR s" morse" .WORD-PATH CR
-}T
 .(   the word graph, group dictionary and visit queue can be used to find explore the words. ) CR
 T{
     CLEAR-VISIT-QUEUE

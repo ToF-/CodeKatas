@@ -10,19 +10,27 @@ REQUIRE group-dictionary.fs
 50000 CONSTANT WORD-GRAPH-SIZE
 WORD-GRAPH-SIZE HCT-CREATE WORD-GRAPH
 
-: PREDECESSOR@ ( ww -- x,t|f )
+QUEUE VISIT-QUEUE
+
+: CLEAR-VISIT-QUEUE
+    VISIT-QUEUE Q-EMPTY ;
+
+: WORD-GRAPH-CLEAR ( -- )
+    WORD-GRAPH-SIZE WORD-GRAPH HCT-INIT ;
+
+: PREDECESSOR@ ( w -- x,t|f )
     SMALL-STRING-S WORD-GRAPH HCT-GET ;
 
-: ADD-ADJACENT-WORD ( wp,ww -- )
+: ADD-ADJACENT-WORD ( p,w -- )
     SMALL-STRING-S WORD-GRAPH HCT-INSERT ;
 
-: ADD-TARGET-WORD ( ww -- )
+: SET-TARGET-WORD ( w -- )
     DUP ADD-ADJACENT-WORD ;
 
-: IS-TARGET-WORD? ( ww -- )
+: IS-TARGET-WORD? ( w -- )
     DUP PREDECESSOR@ IF = ELSE FALSE THEN ;
 
-: WORD-PATH-EXECUTE ( ww,xt -- )
+: WORD-PATH-EXECUTE ( w,xt -- )
     BEGIN
         2DUP EXECUTE
         OVER IS-TARGET-WORD? 0=
@@ -30,8 +38,24 @@ WORD-GRAPH-SIZE HCT-CREATE WORD-GRAPH
         SWAP PREDECESSOR@ DROP
         SWAP
     REPEAT 2DROP ;
-        
-    
+
+: VISIT-ADJACENTS ( w -- )
+    DUP SMALL-STRING-LENGTH@ 0 ?DO         \ p
+        DUP I NTH-GROUP                    \ p,g
+        DUP GROUP-LETTERS@                 \ p,g,ad,l
+        OVER + SWAP ?DO                    \ p,g
+            I C@ OVER GROUP>WORD           \ p,g,w
+            DUP PREDECESSOR@ 0= IF         \ p,g,w
+                ROT                        \ g,w,p
+                DUP ROT                    \ g,p,p,w
+                ADD-ADJACENT-WORD          \ g,p
+                SWAP                       \ p,g
+            ELSE
+                DROP                       \ p,g
+            THEN
+        LOOP DROP                          \ p
+    LOOP DROP ;
+
 \ 50000 CONSTANT WORD-GRAPH-SIZE
 \ WORD-GRAPH-SIZE HCT-CREATE WORD-GRAPH
 \ 

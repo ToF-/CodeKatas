@@ -47,24 +47,3 @@ CREATE LINE-BUFFER MAX-LINE ALLOT
     REPEAT
     DROP CLOSE-FILE THROW ;
 
-\ : GROUP-LETTERS ( addr,l -- ls )
-\     GROUP-DICTIONARY HCT-GET DROP ;
-\ 
-\ : ADD-WORD-GROUPS ( addr,l -- )
-\     DUP 0 ?DO
-\         2DUP I PAD S>GROUP
-\         OVER I + C@ 
-\         PAD COUNT UPDATE-GROUP
-\     LOOP 2DROP ;
-\ 
-\ 
-\ : READ-WORDS ( addr,l -- )
-\     R/O OPEN-FILE THROW
-\     BEGIN
-\         DUP LINE-BUFFER MAX-LINE ROT
-\         READ-LINE THROW
-\     WHILE
-\         LINE-BUFFER SWAP ADD-WORD-GROUPS
-\     REPEAT
-\     DROP CLOSE-FILE THROW ;
-\ 
