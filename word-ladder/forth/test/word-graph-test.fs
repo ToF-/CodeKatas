@@ -4,16 +4,24 @@ REQUIRE ffl/tst.fs
 REQUIRE ../src/word-graph.fs
 
 CR .( word graph ) CR
-.(   a word can be added in the graph as a start word. ) CR
+.(   initially the graph is empty and no word can be found. ) CR
 T{
-    s" horse" ADD-START-WORD
-    s" horse" PAD PREDECESSOR@>S PAD COUNT S" horse" ?STR
+    SS" horse" PREDECESSOR@ ?FALSE
+}T
+.(   after adding a target word, this word can be found, and its predecessor is itself. ) CR
+T{
+    SS" horse" ADD-TARGET-WORD
+    SS" horse" PREDECESSOR@ ?TRUE SS" horse" ?S
+    SS" horse" IS-TARGET-WORD? ?TRUE
 }T
 .(   a word with a predecessor can be added in the graph. ) CR
 T{
-    s" horse" s" worse" ADD-ADJACENT-WORDS
-    s" worse" PAD PREDECESSOR@>S PAD COUNT S" horse" ?STR
+    SS" horse" SS" worse" ADD-ADJACENT-WORD
+    SS" worse" PREDECESSOR@ ?TRUE SS" horse" ?S
+    SS" worse" IS-TARGET-WORD? ?FALSE
 }T
+BYE
+
 .(   the path from a word until the start word can be displayed. ) CR
 T{
     s" worse" IS-START-WORD? ?FALSE
