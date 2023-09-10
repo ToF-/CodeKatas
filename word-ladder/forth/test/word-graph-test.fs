@@ -20,6 +20,17 @@ T{
     SS" worse" PREDECESSOR@ ?TRUE SS" horse" ?S
     SS" worse" IS-TARGET-WORD? ?FALSE
 }T
+.(   a path from a word until the target can be followed. ) CR
+T{
+    SS" worse" SS" morse" ADD-ADJACENT-WORD
+    CREATE FOO 8 CELLS ALLOT VARIABLE FOO-PTR FOO FOO-PTR ! 
+    : TRACK-SMALL-STRING ( ss -- ) FOO-PTR @ ! CELL FOO-PTR +! ;
+    SS" morse" ' TRACK-SMALL-STRING WORD-PATH-EXECUTE
+    FOO 0 CELLS + @ SS" morse" ?S
+    FOO 1 CELLS + @ SS" worse" ?S
+    FOO 2 CELLS + @ SS" horse" ?S
+}T
+
 BYE
 
 .(   the path from a word until the start word can be displayed. ) CR
