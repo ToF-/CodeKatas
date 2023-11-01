@@ -1,4 +1,5 @@
 strict digraph example_with_labels {
+    ratio=1
     node [colorscheme="SVG",width=0.5,height=0.2,shape = ellipse,fontcolor="darkcyan",fontsize=12,fontname="Courier",color="darkcyan"];
     edge [colorscheme="SVG",color="darkcyan",fontcolor="darkcyan",fontsize=10,fontname="Courier"];
     cab -> { cat } [label="1"];
