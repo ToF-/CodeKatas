@@ -1,5 +1,5 @@
 # Breadth-First Graph Search
-We can translate this approach into pseudo code:
+We can translate this approach, called breath-frist search, into pseudo code:
 
 `L` is a list of words
 

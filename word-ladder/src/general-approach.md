@@ -11,13 +11,11 @@ We want to find the shortest path between the words _dog_ and _cat_.
 
 On a sheet of paper we form a graph where the nodes are words and edges are traced betwen words that differ by one and only one letter. 
 
-![example](/images/example.png)
-
 We want to search the graph in a "breadth-first" manner: 
 
 1. starting from the __end__ node _cat_, we see that the nodes _cot_, _car_ and _cab_ adjacent to this node, so we draw an arrow from these nodes back to _cat_ and mark them as the next nodes to examine
-2. from the node _cab_, we have _cat_ which has already been visited, and  _dab_, which hasn't, so we draw an arrow from _dab_ to _cab_  and we mark _dab_ as the node to visit after _cot_
-3. from the node _cot_, we see the nodes _cog_ and _dot_, that are marked as to be visited
+2. from the node _cab_, we have _car_ and _cat_ which have already been visited, and  _dab_, which hasn't, so we draw an arrow from _dab_ to _cab_  and we mark _dab_ as the next node to visit after _cot_
+3. from the node _cot_, we see the nodes _cog_ _cow_ and _dot_, which we link to _cot_ and mark as to be visited
 4. from the node _dab_, we see the nodes _dag_ and _dam_
 5. from the node _cog_, we see the node _dog_ and our search is done, as we have found the target word.
 
