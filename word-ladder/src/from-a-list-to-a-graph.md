@@ -1,28 +1,6 @@
 # From a List to a Graph
 
-The breadth-first search algorithm works fine provided we are can find the adjacents words of a given word. The naïve way to go about it is to do a sequential search on the list of words we have been given.
-
-```
-adjacents(Words, Source) {
-    Result ← ø
-    for Word in Words {
-        differences ← 0
-        for i in 0 to length(Word) - 1 {
-            if Word[i] != Source[i] {
-                differences ← differences + 1
-                if differences > 1 {
-                    break
-                }
-            }
-        }
-        if differences = 1 {
-            insert(Result, Word)
-        }
-    }
-    return Result
-}
-```
-
+The breadth-first search algorithm works but it's not efficient fine provided we are can find the adjacents words of a given word. 
 
 For example the word _cat_ belongs to 3 groups of words:
 

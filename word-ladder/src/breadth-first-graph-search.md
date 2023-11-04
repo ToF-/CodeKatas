@@ -7,8 +7,6 @@ We can translate this approach, called breath-frist search, into pseudo code:
 `Visit` is a FIFO queue where items are appended at the end anp popped at the start\
 `Paths` is a key/value dictionary mapping a word to its predecessor
 
-`Adjacents(W,L)` is a function that returns the words that are adjacent to `W` in the list `L`
-
 ```
 wordladder(Target, Source, Words) {
     Visit ← ∅
@@ -38,4 +36,26 @@ wordladder(Target, Source, Words) {
     }
 }
 ```
-and now the remaining difficulty is in the function `adjacents` which should find all the words in the list that are adjacent to a given word.
+At the center of this search process is the function `adjacents` which should find all the words in the list that are adjacent to a given word. A simple but not efficient way to go about it is to do a sequential search on the list of words we have been given:
+
+```
+adjacents(Words, Source) {
+    Result ← ø
+    for Word in Words {
+        differences ← 0
+        for i in 0 to length(Word) - 1 {
+            if Word[i] != Source[i] {
+                differences ← differences + 1
+                if differences > 1 {
+                    break
+                }
+            }
+        }
+        if differences = 1 {
+            insert(Result, Word)
+        }
+    }
+    return Result
+}
+```
+
