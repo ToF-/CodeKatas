@@ -1,13 +1,28 @@
 # From a List to a Graph
 
-The breadth-first search algorithm works fine provided we give it a graph of adjacent words. But we don't have this information yet.
-How to create such a graph ? If we go naïvely about it:
+The breadth-first search algorithm works fine provided we are can find the adjacents words of a given word. The naïve way to go about it is to do a sequential search on the list of words we have been given.
 
-- for every word _A_ in the list, look at every word _B_ in the list; if _A_ is adjacent to _B_ then add the edge from _A_ to _B_ in the graph.
+```
+adjacents(Words, Source) {
+    Result ← ø
+    for Word in Words {
+        differences ← 0
+        for i in 0 to length(Word) - 1 {
+            if Word[i] != Source[i] {
+                differences ← differences + 1
+                if differences > 1 {
+                    break
+                }
+            }
+        }
+        if differences = 1 {
+            insert(Result, Word)
+        }
+    }
+    return Result
+}
+```
 
-our program will have to make millions of comparisons to create the graph.
-
-We can reduce this number, by using storing some intermediate information about the adjacent words of a word.
 
 For example the word _cat_ belongs to 3 groups of words:
 
