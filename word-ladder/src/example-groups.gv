@@ -1,15 +1,19 @@
-strict graph ip_map {
-	fontname="Helvetica,Arial,sans-serif"
-	node [fontname="Helvetica,Arial,sans-serif"]
-	edge [fontname="Helvetica,Arial,sans-serif"]
-CAT -- {_AT,C_T,CA_};
-CAB -- {_AB,C_B,CA_};
-COG -- {_OG,C_G,CO_};
-COT -- {_OT,C_T,CO_};
-DAB -- {_AB,D_B,DA_};
-DAG -- {_AG,D_G,DA_};
-DAM -- {_AM,D_M,DA_};
-DOC -- {_OC,D_C,DO_};
-DOG -- {_OG,D_G,DO_};
-DOT -- {_OT,D_T,DO_};
+strict digraph ip_map {
+    layout=neato
+    node [colorscheme="SVG",width=0.5,height=0.2,shape = ellipse,fontcolor="darkcyan",fontsize=12,fontname="Courier",color="darkcyan"];
+    edge [colorscheme="SVG",color="darkcyan",fontcolor="darkcyan",fontsize=10,fontname="Courier"];
+cat -> { _at, c_t, ca_ } [label="1"];
+c_t -> { cot } [label="1"];
+ca_ -> { cab, car } [label="1"];
+cot -> { _ot, co_ } [label="2"];
+cab -> { _ab, c_b } [label="3"];
+car -> { _ar, c_r };
+_ot -> { dot } [label="2"];
+co_ -> { cog, cow } [label="2"];
+_ab -> { dab } [label="3"];
+cog -> { _og, c_g } [label="4"];
+cow -> { _ow, c_w };
+dab -> { d_b, da_ };
+_og -> { dog } [label="4"];
 }
+
