@@ -1,6 +1,69 @@
 # From a List to a Graph
 
-The breadth-first search algorithm works but it's not efficient fine provided we are can find the adjacents words of a given word. 
+The breadth-first search algorithm works but it's not efficient fine provided we are can find the adjacents words of a given word. Consider this implementation in Python:
+```python
+import sys
+
+wordFilePath = sys.argv[1]
+source = sys.argv[2]
+target = sys.argv[3]
+words = []
+
+def adjacents(words, source):
+    result = []
+    for word in words:
+        differences = 0
+        for i in range(0, len(word)):
+            if word[i] != source[i]:
+                differences = differences + 1
+                if differences > 1:
+                       break
+        if differences == 1:
+            result.append(word)
+    return result
+
+def wordLadder(target, source, words):
+    visit = []
+    paths = {}
+    visit.append(source)
+    paths[source] = "*****"
+    while visit:
+        current = visit.pop(0)
+        if current == target:
+            break
+        adjs = adjacents(words, current)
+        for adjacent in adjs:
+            if not paths.get(adjacent):
+                paths[adjacent] = current
+                visit.append(adjacent)
+    if current == target:
+        while current != "*****":
+            print(current)
+            current = paths.get(current)
+    else:
+        print("no path")
+
+with open(wordFilePath) as wordFile:
+    for line in wordFile:
+        words.append(line.strip())
+
+wordLadder(target, source, words)
+```
+When given a list of 5757 five-letter words its profiled execution results in the following:
+```
+~/Coding/KT/word-ladder: python3 -m cProfile python/wordladder-list.py data/www-cs-faculty.stanford.edu_~knuth_sgb-words.txt backs horse
+horse
+gorse
+goose
+goosy
+gooky
+booky
+books
+bocks
+backs
+         20877682 function calls in 19.822 seconds
+```
+
 
 For example the word _cat_ belongs to 3 groups of words:
 
