@@ -1,0 +1,32 @@
+1929 path steps
+backs
+bocks
+books
+booky
+gooky
+goosy
+goose
+gorse
+horse
+1837 comparisons
+
+real	0m0.047s
+user	0m0.031s
+sys	0m0.012s
+
+2597 path steps
+backs
+bocks
+cocks
+corks
+corns
+horns
+horny
+horsy
+horse
+8677307 comparisons
+
+real	0m3.618s
+user	0m3.589s
+sys	0m0.016s
+

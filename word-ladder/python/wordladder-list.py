@@ -22,12 +22,14 @@ def adjacents(words, source):
     return result
 
 def wordLadder(target, source, words):
+    global comp
     visit = []
     paths = {}
     visit.append(source)
     paths[source] = "*****"
     while visit:
         current = visit.pop(0)
+        comp = comp + 1
         if current == target:
             break
         adjs = adjacents(words, current)
